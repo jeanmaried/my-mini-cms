@@ -97,7 +97,7 @@ ul {
 }
 
 items {
-  width: calc(50% - 50px);
+  /* width: calc(50% - 50px); */
   list-style-type: none;
   margin-right: 50px;
   background-color: rgb(237, 237, 237);

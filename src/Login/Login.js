@@ -5,22 +5,21 @@ import { getUser } from '../redux/modules/items';
 import { connect } from 'react-redux';
 import { map } from '@firebase/util';
 
-class Login extends Component {
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     user: null,
-  //     authenticated: false
-  //   };
-  // }
+const styles = {
+  loginContainer: {
+    width: '100vw',
+    height: '90vh'
+  }
+};
 
-  // componentDidMount() {
-  //   auth.onAuthStateChanged(user => {
-  //     if (user) {
-  //       this.setState({ user });
-  //     }
-  //   });
-  // }
+class Login extends Component {
+  componentDidMount() {
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        this.setState({ user });
+      }
+    });
+  }
 
   login = () => {
     auth.signInWithPopup(provider).then(result => {
@@ -31,7 +30,10 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="app">
+      <div
+        style={styles.loginContainer}
+        className="flex align-items-center justify-center"
+      >
         {!this.props.auth ? (
           <button onClick={this.login}>Log In</button>
         ) : (

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import firebase, { auth, provider } from '../firebase';
+import { connect } from 'react-redux';
 
 class App extends Component {
   constructor() {
@@ -7,6 +8,7 @@ class App extends Component {
     this.state = {
       projectDescription: '',
       projectTitle: '',
+      projectImage: {},
       items: [],
       user: null
     };
@@ -46,12 +48,14 @@ class App extends Component {
     const itemsRef = firebase.database().ref('projects');
     const item = {
       title: this.state.projectTitle,
-      description: this.state.projectDescription
+      description: this.state.projectDescription,
+      image: this.state.projectImage
     };
     itemsRef.push(item);
     this.setState({
       projectDescription: '',
-      projectTitle: ''
+      projectTitle: '',
+      projectImage: ''
     });
   };
 
@@ -65,9 +69,9 @@ class App extends Component {
       <div className="app">
         {this.state.user ? (
           <div>
-            {/* <div className="user-profile">
+            <div className="user-profile">
               <img src={this.state.user.photoURL} />
-            </div> */}
+            </div>
             <div className="container">
               <section className="add-item">
                 <form onSubmit={this.handleSubmit}>
@@ -85,6 +89,12 @@ class App extends Component {
                     onChange={this.handleChange}
                     value={this.state.projectDescription}
                   />
+                  <input
+                    type="file"
+                    name="projectImage"
+                    id="Image"
+                    onChange={this.handleChange}
+                  />
                   <button>Add Item</button>
                 </form>
               </section>
@@ -96,6 +106,7 @@ class App extends Component {
                         <li className="items" key={item.id}>
                           <h3>{item.title}</h3>
                           <p>Description: {item.description}</p>
+                          <img src={item.image} alt="project image" />
                           <button onClick={() => this.removeItem(item.id)}>
                             Remove
                           </button>
