@@ -27,6 +27,10 @@ class Header extends Component {
     return (
       <header>
         <div className="wrapper">
+          <div className="flex">
+            <i className="fa fa-rocket" aria-hidden="true" />
+            <h1>JoDalmasso.com</h1>
+          </div>
           {this.props.auth ? (
             <div style={styles.button} className="flex justify-end">
               <button onClick={this.logout}>Log Out</button>

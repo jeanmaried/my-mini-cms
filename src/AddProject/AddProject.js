@@ -1,0 +1,99 @@
+import React, { Component } from 'react';
+import firebase, { auth, provider } from '../firebase';
+import { connect } from 'react-redux';
+import { getUser } from '../redux/modules/items';
+
+const styles = {
+  projectContainer: {
+    width: '80vw'
+  },
+
+  description: {
+    paddingBottom: 150
+  },
+
+  button: {
+    width: 200
+  }
+};
+
+class AddProject extends Component {
+  constructor() {
+    super();
+    this.state = {
+      projectDescription: '',
+      projectTitle: '',
+      projectImage: ''
+    };
+  }
+
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    const itemsRef = firebase.database().ref('projects');
+    const item = {
+      title: this.state.projectTitle,
+      description: this.state.projectDescription,
+      image: this.state.projectImage
+    };
+    itemsRef.push(item);
+    this.setState({
+      projectDescription: '',
+      projectTitle: '',
+      projectImage: ''
+    });
+  };
+
+  render() {
+    return (
+      <div style={styles.projectContainer}>
+        {this.props.user ? (
+          <div>
+            <div className="container flex direction-column">
+              <section className="add-item">
+                <form onSubmit={this.handleSubmit}>
+                  <input
+                    type="text"
+                    name="projectTitle"
+                    placeholder="Title"
+                    onChange={this.handleChange}
+                    value={this.state.projectTitle}
+                  />
+                  <input
+                    type="text"
+                    name="projectDescription"
+                    placeholder="Description"
+                    style={styles.description}
+                    onChange={this.handleChange}
+                    value={this.state.projectDescription}
+                  />
+                  <input
+                    type="file"
+                    name="projectImage"
+                    id="Image"
+                    onChange={this.handleChange}
+                  />
+                  <div className="flex justify-center">
+                    <button style={styles.button}>Add Project</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = ({ stateItems }) => ({
+  auth: stateItems.authenticated,
+  user: stateItems.userInfo
+});
+
+export default connect(mapStateToProps)(AddProject);

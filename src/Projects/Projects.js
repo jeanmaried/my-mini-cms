@@ -1,16 +1,27 @@
 import React, { Component } from 'react';
 import firebase, { auth, provider } from '../firebase';
 import { connect } from 'react-redux';
+import AddProject from '../AddProject';
 
-class App extends Component {
+const styles = {
+  projectContainer: {
+    width: '80vw'
+  },
+
+  description: {
+    paddingBottom: 150
+  },
+
+  button: {
+    width: 200
+  }
+};
+
+class Projects extends Component {
   constructor() {
     super();
     this.state = {
-      projectDescription: '',
-      projectTitle: '',
-      projectImage: {},
-      items: [],
-      user: null
+      items: []
     };
   }
 
@@ -37,28 +48,6 @@ class App extends Component {
     });
   }
 
-  handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-    const itemsRef = firebase.database().ref('projects');
-    const item = {
-      title: this.state.projectTitle,
-      description: this.state.projectDescription,
-      image: this.state.projectImage
-    };
-    itemsRef.push(item);
-    this.setState({
-      projectDescription: '',
-      projectTitle: '',
-      projectImage: ''
-    });
-  };
-
   removeItem = itemId => {
     const itemRef = firebase.database().ref(`/projects/${itemId}`);
     itemRef.remove();
@@ -66,38 +55,15 @@ class App extends Component {
 
   render() {
     return (
-      <div className="app">
+      <div style={styles.projectContainer}>
         {this.state.user ? (
           <div>
             <div className="user-profile">
               <img src={this.state.user.photoURL} />
             </div>
-            <div className="container">
-              <section className="add-item">
-                <form onSubmit={this.handleSubmit}>
-                  <input
-                    type="text"
-                    name="projectTitle"
-                    placeholder="Title"
-                    onChange={this.handleChange}
-                    value={this.state.projectTitle}
-                  />
-                  <input
-                    type="text"
-                    name="projectDescription"
-                    placeholder="Description"
-                    onChange={this.handleChange}
-                    value={this.state.projectDescription}
-                  />
-                  <input
-                    type="file"
-                    name="projectImage"
-                    id="Image"
-                    onChange={this.handleChange}
-                  />
-                  <button>Add Item</button>
-                </form>
-              </section>
+            <h1 className="text-align">Projects</h1>
+            <div className="container flex direction-column">
+              <AddProject />
               <section className="display-item">
                 <div className="wrapper">
                   <ul>
@@ -118,36 +84,10 @@ class App extends Component {
               </section>
             </div>
           </div>
-        ) : (
-          <div className="wrapper">
-            <p>
-              You must be logged in to see the potluck list and submit to it.
-            </p>
-          </div>
-        )}
+        ) : null}
       </div>
     );
   }
 }
 
-export default App;
-
-// import React, { Component } from 'react';
-
-// class Projects extends Component {
-//   render() {
-//     return (
-//       <div>
-//         <h1>Projects</h1>
-//         <div>
-//           <input type="text" name="title" />
-//           <input type="text" name="description" />
-//           <input type="text" name="tools" />
-//           <input type="image" name="image" />
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-
-// export default Projects;
+export default Projects;

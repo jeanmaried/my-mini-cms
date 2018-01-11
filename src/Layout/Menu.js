@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const styles = {
   menuContainer: {
     height: '100vh',
-    width: 200,
+    width: '20vw',
     background: '#fa6900'
   }
 };
