@@ -89,7 +89,6 @@ class AddProject extends Component {
                     name="projectImage"
                     id="Image"
                     onChange={this.handleChange}
-                    // value={this.state.projectImage}
                   />
                   <div className="flex justify-center">
                     <button style={styles.button}>Add Project</button>

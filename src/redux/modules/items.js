@@ -2,6 +2,8 @@ const GET_NO_AUTH = 'GET_NO_AUTH';
 const GET_USER = 'GET_USER';
 const GET_PROJECT = 'GET_PROJECT';
 const GET_ALL_PROJECTS = 'GET_ALL_PROJECTS';
+const GET_TOGGLE = 'GET_TOGGLE';
+const GET_UNTOGGLE = 'GET_UNTOGGLE';
 
 export const getNoAuth = () => ({
   type: GET_NO_AUTH
@@ -22,8 +24,22 @@ export const getAllProjects = projects => ({
   payload: projects
 });
 
+export const getToggle = () => ({
+  type: GET_TOGGLE
+});
+
+export const getUnToggle = () => ({
+  type: GET_UNTOGGLE
+});
+
 export default (
-  state = { authenticated: false, userInfo: {}, project: {}, projects: [] },
+  state = {
+    authenticated: false,
+    userInfo: {},
+    project: {},
+    projects: [],
+    toggleNewProject: false
+  },
   action
 ) => {
   switch (action.type) {
@@ -35,6 +51,10 @@ export default (
       return { ...state, project: {} };
     case GET_ALL_PROJECTS:
       return { ...state, projects: {} };
+    case GET_TOGGLE:
+      return { ...state, toggleNewProject: true };
+    case GET_UNTOGGLE:
+      return { ...state, toggleNewProject: false };
     default:
       return state;
   }
