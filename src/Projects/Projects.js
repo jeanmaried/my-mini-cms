@@ -31,20 +31,31 @@ class Projects extends Component {
         this.setState({ user });
       }
     });
+
     const itemsRef = firebase.database().ref('projects');
     itemsRef.on('value', snapshot => {
       let items = snapshot.val();
       let newState = [];
       for (let item in items) {
-        newState.push({
-          id: item,
-          title: items[item].title,
-          description: items[item].description
-        });
+        let imageURL = items[item].image;
+        const storageRef = firebase.storage().ref();
+        storageRef
+          .child('project_images/' + imageURL)
+          .getDownloadURL()
+          .then(url => {
+            imageURL = url;
+            newState.push({
+              id: item,
+              title: items[item].title,
+              description: items[item].description,
+              imageURL: imageURL
+            });
+            this.setState({
+              items: newState
+            });
+          })
+          .catch(function(error) {});
       }
-      this.setState({
-        items: newState
-      });
     });
   }
 
@@ -72,7 +83,7 @@ class Projects extends Component {
                         <li className="items" key={item.id}>
                           <h3>{item.title}</h3>
                           <p>Description: {item.description}</p>
-                          <img src={item.image} alt="project image" />
+                          <img src={item.imageURL} alt="project image" />
                           <button onClick={() => this.removeItem(item.id)}>
                             Remove
                           </button>

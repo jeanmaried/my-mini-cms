@@ -31,11 +31,14 @@ class About extends Component {
     itemsRef.on('value', snapshot => {
       let items = snapshot.val();
       let newState = items;
-
-      this.setState({
-        aboutTitle: newState.title,
-        aboutContent: newState.content
-      });
+      {
+        newState
+          ? this.setState({
+              aboutTitle: newState.title,
+              aboutContent: newState.content
+            })
+          : null;
+      }
     });
   }
 
@@ -58,6 +61,7 @@ class About extends Component {
   render() {
     return (
       <div style={styles.projectContainer}>
+        <h1 className="text-align">About Page</h1>
         <div className="container flex direction-column">
           <section className="add-item">
             <form onSubmit={this.handleSubmit}>
@@ -68,8 +72,7 @@ class About extends Component {
                 onChange={this.handleChange}
                 value={this.state.aboutTitle}
               />
-              <input
-                type="text"
+              <textarea
                 name="aboutContent"
                 placeholder="Content"
                 style={styles.description}

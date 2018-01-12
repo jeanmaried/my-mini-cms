@@ -14,10 +14,23 @@ class Routes extends Component {
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
-        this.props.dispatch(getUser(user));
+        let emailCheck = user.email.endsWith('@jodalmasso.com');
+        if (emailCheck) {
+          this.props.dispatch(getUser(user));
+        }
       }
     });
   }
+  // const user = result.user;
+  // let emailCheck = user.email.endsWith('@jodalmasso.com');
+  // console.log(emailCheck);
+  // if (!emailCheck) {
+  //   auth.signOut().then(() => {
+  //     this.props.dispatch(getNoAuth());
+  //   });
+  // } else {
+  //   this.props.dispatch(getUser(user));
+  // }
 
   render() {
     let authRoutes = this.props.auth ? (

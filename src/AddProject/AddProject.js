@@ -23,29 +23,42 @@ class AddProject extends Component {
     this.state = {
       projectDescription: '',
       projectTitle: '',
-      projectImage: ''
+      projectImage: {}
     };
   }
 
   handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
+    if (e.target.name == 'projectImage') {
+      this.setState({
+        projectImage: e.target.files[0]
+      });
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+    }
   };
 
   handleSubmit = e => {
     e.preventDefault();
+    let projectImage = this.state.projectImage;
+    const storageRef = firebase
+      .storage()
+      .ref('project_images/' + projectImage.name);
+    storageRef.put(projectImage);
+    console.log(projectImage);
     const itemsRef = firebase.database().ref('projects');
     const item = {
       title: this.state.projectTitle,
       description: this.state.projectDescription,
-      image: this.state.projectImage
+      image: projectImage.name
     };
     itemsRef.push(item);
+
     this.setState({
       projectDescription: '',
       projectTitle: '',
-      projectImage: ''
+      projectImage: {}
     });
   };
 
@@ -64,8 +77,7 @@ class AddProject extends Component {
                     onChange={this.handleChange}
                     value={this.state.projectTitle}
                   />
-                  <input
-                    type="text"
+                  <textarea
                     name="projectDescription"
                     placeholder="Description"
                     style={styles.description}
@@ -77,6 +89,7 @@ class AddProject extends Component {
                     name="projectImage"
                     id="Image"
                     onChange={this.handleChange}
+                    // value={this.state.projectImage}
                   />
                   <div className="flex justify-center">
                     <button style={styles.button}>Add Project</button>

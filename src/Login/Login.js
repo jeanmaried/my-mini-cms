@@ -13,18 +13,13 @@ const styles = {
 };
 
 class Login extends Component {
-  componentDidMount() {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        this.setState({ user });
-      }
-    });
-  }
-
   login = () => {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
-      this.props.dispatch(getUser(user));
+      let emailCheck = user.email.endsWith('@jodalmasso.com');
+      if (emailCheck) {
+        this.props.dispatch(getUser(user));
+      }
     });
   };
 

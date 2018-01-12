@@ -5,7 +5,7 @@ const config = {
   authDomain: 'mi-mini-cms.firebaseapp.com',
   databaseURL: 'https://mi-mini-cms.firebaseio.com',
   projectId: 'mi-mini-cms',
-  storageBucket: '',
+  storageBucket: 'gs://mi-mini-cms.appspot.com',
   messagingSenderId: '134708493332'
 };
 firebase.initializeApp(config);

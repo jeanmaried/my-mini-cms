@@ -68,7 +68,8 @@ header i {
   overflow: hidden;
 }
 
-input {
+input,
+textarea {
   font-size: 22px;
   color: #000;
   padding: 18px 22px;
