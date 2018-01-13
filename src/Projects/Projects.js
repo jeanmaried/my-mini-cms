@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import firebase, { auth, provider } from '../firebase';
 import { connect } from 'react-redux';
-import { getToggle, getUnToggle } from '../redux/modules/items';
+import {
+  getToggle,
+  getUnToggle,
+  getUser,
+  getAllProjects
+} from '../redux/modules/items';
 import AddProject from '../AddProject';
 
 const styles = {
   projectContainer: {
-    width: '80vw'
+    width: '80vw',
+    minHeight: '100vh',
+    borderBottom: '3px solid #103d5d'
   },
 
   description: {
@@ -19,6 +26,14 @@ const styles = {
 
   img: {
     height: 200
+  },
+
+  project_header: {
+    backgroundColor: '#103d5d',
+    margin: 0,
+    color: '#fff',
+    fontWeight: '300',
+    padding: 15
   }
 };
 
@@ -34,40 +49,39 @@ class Projects extends Component {
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
-        this.setState({ user });
+        this.props.dispatch(getUser(user));
       }
     });
 
-    const itemsRef = firebase.database().ref('projects');
-    itemsRef.on('value', snapshot => {
-      let items = snapshot.val();
+    const storageRef = firebase.storage().ref();
+    const projectsRef = firebase.database().ref('projects');
+
+    projectsRef.on('value', snapshot => {
       let newState = [];
-      for (let item in items) {
-        let imageURL = items[item].image;
-        const storageRef = firebase.storage().ref();
+      let projects = snapshot.val();
+
+      for (let project in projects) {
+        let imageName = projects[project].image;
+        newState.push({
+          id: project,
+          title: projects[project].title,
+          description: projects[project].description,
+          imageName: imageName
+        });
+
         storageRef
-          .child('project_images/' + imageURL)
+          .child('project_images/' + imageName)
           .getDownloadURL()
           .then(url => {
-            newState.push({
-              id: item,
-              title: items[item].title,
-              description: items[item].description,
-              imageURL: url,
-              imageName: imageURL
-            });
-            this.setState({
-              items: newState
-            });
+            document.getElementById(imageName).src = url;
           })
-          .catch(function(error) {});
+          .catch(error => {});
       }
+      this.props.dispatch(getAllProjects(newState));
     });
   }
 
   removeItem = item => {
-    console.log(item);
-
     const storageRef = firebase
       .storage()
       .ref()
@@ -96,11 +110,8 @@ class Projects extends Component {
   render() {
     return (
       <div style={styles.projectContainer}>
-        {this.state.user ? (
+        {this.props.user ? (
           <div>
-            <div className="user-profile">
-              <img src={this.state.user.photoURL} />
-            </div>
             <h1 className="text-align">Projects</h1>
             <div className="flex justify-center">
               {!this.props.toggle ? (
@@ -115,25 +126,39 @@ class Projects extends Component {
             </div>
             <div className="container flex direction-column">
               {this.props.toggle ? <AddProject /> : null}
-              <section className="display-item">
+              <section className="display-project">
                 <div className="wrapper">
                   <ul>
-                    {this.state.items.map(item => {
-                      return (
-                        <li className="items" key={item.id}>
-                          <h3>{item.title}</h3>
-                          <p>Description: {item.description}</p>
-                          <img
-                            style={styles.img}
-                            src={item.imageURL}
-                            alt="project image"
-                          />
-                          <button onClick={() => this.removeItem(item)}>
-                            Remove
-                          </button>
-                        </li>
-                      );
-                    })}
+                    {this.props.projects
+                      ? this.props.projects.map(project => {
+                          return (
+                            <li
+                              style={styles.projectContainer}
+                              className="items"
+                              key={project.id}
+                            >
+                              <div
+                                style={styles.project_header}
+                                className="flex justify-between"
+                              >
+                                <h3>{project.title}</h3>
+                                <button
+                                  onClick={() => this.removeItem(project)}
+                                >
+                                  Remove
+                                </button>
+                              </div>
+                              <p>Description: {project.description}</p>
+                              <img
+                                id={project.imageName}
+                                style={styles.img}
+                                src={project.downloadURL}
+                                alt="project image"
+                              />
+                            </li>
+                          );
+                        })
+                      : null}
                   </ul>
                 </div>
               </section>
@@ -146,7 +171,9 @@ class Projects extends Component {
 }
 
 const mapStateToProps = ({ stateItems }) => ({
-  toggle: stateItems.toggleNewProject
+  toggle: stateItems.toggleNewProject,
+  user: stateItems.userInfo,
+  projects: stateItems.projects
 });
 
 export default connect(mapStateToProps)(Projects);

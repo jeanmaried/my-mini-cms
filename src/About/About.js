@@ -5,7 +5,8 @@ import { getUser } from '../redux/modules/items';
 
 const styles = {
   projectContainer: {
-    width: '80vw'
+    width: '80vw',
+    minHeight: '100vh'
   },
 
   description: {

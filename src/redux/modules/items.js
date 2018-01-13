@@ -37,7 +37,7 @@ export default (
     authenticated: false,
     userInfo: {},
     project: {},
-    projects: [],
+    projects: undefined,
     toggleNewProject: false
   },
   action
@@ -50,7 +50,7 @@ export default (
     case GET_PROJECT:
       return { ...state, project: {} };
     case GET_ALL_PROJECTS:
-      return { ...state, projects: {} };
+      return { ...state, projects: action.payload };
     case GET_TOGGLE:
       return { ...state, toggleNewProject: true };
     case GET_UNTOGGLE:

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase, { auth, provider } from '../firebase';
 import { connect } from 'react-redux';
-import { getUser } from '../redux/modules/items';
+import { getUser, getToggle, getUnToggle } from '../redux/modules/items';
 
 const styles = {
   projectContainer: {
@@ -45,8 +45,10 @@ class AddProject extends Component {
     const storageRef = firebase
       .storage()
       .ref('project_images/' + projectImage.name);
-    storageRef.put(projectImage);
-    console.log(projectImage);
+    storageRef.put(projectImage).on('state_changed', snapshot => {
+      console.log(snapshot);
+    });
+
     const itemsRef = firebase.database().ref('projects');
     const item = {
       title: this.state.projectTitle,
@@ -60,6 +62,7 @@ class AddProject extends Component {
       projectTitle: '',
       projectImage: {}
     });
+    this.props.dispatch(getUnToggle());
   };
 
   render() {
@@ -105,7 +108,8 @@ class AddProject extends Component {
 
 const mapStateToProps = ({ stateItems }) => ({
   auth: stateItems.authenticated,
-  user: stateItems.userInfo
+  user: stateItems.userInfo,
+  toggle: stateItems.toggleNewProject
 });
 
 export default connect(mapStateToProps)(AddProject);

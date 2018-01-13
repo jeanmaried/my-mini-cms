@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const styles = {
   menuContainer: {
-    height: '100vh',
+    minHeight: '100%',
     width: '20vw',
     background: '#fa6900'
   }

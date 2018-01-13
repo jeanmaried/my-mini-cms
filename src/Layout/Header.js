@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 const styles = {
   header: {
-    height: '10vh'
+    padding: '20px 15px 20px 15px'
   },
 
   button: {
@@ -24,18 +24,16 @@ class Header extends Component {
 
   render() {
     return (
-      <header>
-        <div className="wrapper">
-          <div className="flex">
-            <i className="fa fa-rocket" aria-hidden="true" />
-            <h1>JoDalmasso.com</h1>
-          </div>
-          {this.props.auth ? (
-            <div style={styles.button} className="flex justify-end">
-              <button onClick={this.logout}>Log Out</button>
-            </div>
-          ) : null}
+      <header style={styles.header} className="flex">
+        <div className="flex justify-between">
+          <i className="fa fa-rocket" aria-hidden="true" />
+          <h1>JoDalmasso.com</h1>
         </div>
+        {this.props.auth ? (
+          <div style={styles.button} className="flex justify-end">
+            <button onClick={this.logout}>Log Out</button>
+          </div>
+        ) : null}
       </header>
     );
   }
