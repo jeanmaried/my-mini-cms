@@ -6,6 +6,7 @@ import Projects from './Projects';
 import NotFound from './NotFound';
 import Login from './Login';
 import Home from './Home';
+import AddProject from './AddProject';
 import { connect } from 'react-redux';
 import { getUser } from './redux/modules/items';
 import firebase, { auth, provider } from './firebase';
@@ -37,6 +38,7 @@ class Routes extends Component {
       <Switch>
         <Route exact path="/about" component={About} />
         <Route exact path="/projects" component={Projects} />
+        <Route exact path="/addproject" component={AddProject} />
       </Switch>
     ) : null;
     return (

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import firebase, { auth, provider } from '../firebase';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   getToggle,
@@ -53,7 +54,6 @@ class Projects extends Component {
       }
     });
 
-    const storageRef = firebase.storage().ref();
     const projectsRef = firebase.database().ref('projects');
 
     projectsRef.on('value', snapshot => {
@@ -61,21 +61,13 @@ class Projects extends Component {
       let projects = snapshot.val();
 
       for (let project in projects) {
-        let imageName = projects[project].image;
+        // let imageName = projects[project].image;
         newState.push({
           id: project,
           title: projects[project].title,
           description: projects[project].description,
-          imageName: imageName
+          image: projects[project].image
         });
-
-        storageRef
-          .child('project_images/' + imageName)
-          .getDownloadURL()
-          .then(url => {
-            document.getElementById(imageName).src = url;
-          })
-          .catch(error => {});
       }
       this.props.dispatch(getAllProjects(newState));
     });
@@ -99,12 +91,8 @@ class Projects extends Component {
     itemRef.remove();
   };
 
-  toggleNew = () => {
-    this.props.dispatch(getToggle());
-  };
-
-  unToggleNew = () => {
-    this.props.dispatch(getUnToggle());
+  addProject = () => {
+    this.props.history.push('/addproject');
   };
 
   render() {
@@ -114,15 +102,9 @@ class Projects extends Component {
           <div>
             <h1 className="text-align">Projects</h1>
             <div className="flex justify-center">
-              {!this.props.toggle ? (
-                <button style={styles.button} onClick={this.toggleNew}>
-                  New Project
-                </button>
-              ) : (
-                <button style={styles.button} onClick={this.unToggleNew}>
-                  X
-                </button>
-              )}
+              <button style={styles.button} onClick={this.addProject}>
+                New Project
+              </button>
             </div>
             <div className="container flex direction-column">
               {this.props.toggle ? <AddProject /> : null}
@@ -150,9 +132,8 @@ class Projects extends Component {
                               </div>
                               <p>Description: {project.description}</p>
                               <img
-                                id={project.imageName}
+                                src={project.image}
                                 style={styles.img}
-                                src={project.downloadURL}
                                 alt="project image"
                               />
                             </li>
@@ -176,4 +157,4 @@ const mapStateToProps = ({ stateItems }) => ({
   projects: stateItems.projects
 });
 
-export default connect(mapStateToProps)(Projects);
+export default withRouter(connect(mapStateToProps)(Projects));

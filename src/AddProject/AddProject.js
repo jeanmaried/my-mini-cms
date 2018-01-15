@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import firebase, { auth, provider } from '../firebase';
 import { connect } from 'react-redux';
 import { getUser, getToggle, getUnToggle } from '../redux/modules/items';
+import { withRouter } from 'react-router-dom';
 
 const styles = {
   projectContainer: {
@@ -23,7 +24,7 @@ class AddProject extends Component {
     this.state = {
       projectDescription: '',
       projectTitle: '',
-      projectImage: {}
+      projectImage: ''
     };
   }
 
@@ -41,33 +42,50 @@ class AddProject extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
     let projectImage = this.state.projectImage;
-    const storageRef = firebase
-      .storage()
-      .ref('project_images/' + projectImage.name);
-    storageRef.put(projectImage).on('state_changed', snapshot => {
-      console.log(snapshot);
-    });
+
+    const storageRef = firebase.storage().ref();
+
+    const imagesRef = storageRef.child(projectImage.name);
 
     const itemsRef = firebase.database().ref('projects');
-    const item = {
-      title: this.state.projectTitle,
-      description: this.state.projectDescription,
-      image: projectImage.name
-    };
-    itemsRef.push(item);
 
-    this.setState({
-      projectDescription: '',
-      projectTitle: '',
-      projectImage: {}
-    });
-    this.props.dispatch(getUnToggle());
+    imagesRef.put(projectImage).on(
+      'state_changed',
+      snapshot => {
+        console.log(snapshot);
+      },
+      error => {
+        console.log(error);
+      },
+      () => {
+        imagesRef
+          .getDownloadURL()
+          .then(url => {
+            let item = {
+              title: this.state.projectTitle,
+              description: this.state.projectDescription,
+              image: url
+            };
+
+            itemsRef.push(item);
+
+            this.props.history.push('/projects');
+          })
+          .catch(error => {});
+      }
+    );
+  };
+
+  backToProjects = () => {
+    this.props.history.push('/projects');
   };
 
   render() {
     return (
       <div style={styles.projectContainer}>
+        <h1 className="text-align">Add Project</h1>
         {this.props.user ? (
           <div>
             <div className="container flex direction-column">
@@ -93,8 +111,12 @@ class AddProject extends Component {
                     id="Image"
                     onChange={this.handleChange}
                   />
-                  <div className="flex justify-center">
+                  <div className="flex justify-around">
                     <button style={styles.button}>Add Project</button>
+
+                    <button style={styles.button} onClick={this.backToProjects}>
+                      Cancel
+                    </button>
                   </div>
                 </form>
               </section>
@@ -112,4 +134,4 @@ const mapStateToProps = ({ stateItems }) => ({
   toggle: stateItems.toggleNewProject
 });
 
-export default connect(mapStateToProps)(AddProject);
+export default withRouter(connect(mapStateToProps)(AddProject));
