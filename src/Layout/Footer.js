@@ -4,7 +4,9 @@ class Footer extends Component {
   render() {
     return (
       <footer>
-        <p>this is the footer</p>
+        <a href="http://www.jodalmasso.com/" target="_blank">
+          Go to: JoDalmasso.com
+        </a>
       </footer>
     );
   }

@@ -27,13 +27,10 @@ class Login extends Component {
     return (
       <div
         style={styles.loginContainer}
-        className="flex align-items-center justify-center"
+        className="flex direction-column align-items-center justify-center"
       >
-        {!this.props.auth ? (
-          <button onClick={this.login}>Log In</button>
-        ) : (
-          <h1>Welcome</h1>
-        )}
+        <h1>Welcome to your website's CMS</h1>
+        <button onClick={this.login}>Log In</button>
       </div>
     );
   }

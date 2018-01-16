@@ -117,11 +117,11 @@ class AddProject extends Component {
                   />
                   <div className="flex justify-around">
                     <button style={styles.button}>
-                      {this.state.loading ? 'Loading...' : 'Cancel'}
+                      {this.state.loading ? 'Loading...' : 'Add Project'}
                     </button>
 
                     <button style={styles.button} onClick={this.backToProjects}>
-                      Add Project
+                      Cancel
                     </button>
                   </div>
                 </form>

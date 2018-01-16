@@ -22,16 +22,6 @@ class Routes extends Component {
       }
     });
   }
-  // const user = result.user;
-  // let emailCheck = user.email.endsWith('@jodalmasso.com');
-  // console.log(emailCheck);
-  // if (!emailCheck) {
-  //   auth.signOut().then(() => {
-  //     this.props.dispatch(getNoAuth());
-  //   });
-  // } else {
-  //   this.props.dispatch(getUser(user));
-  // }
 
   render() {
     let authRoutes = this.props.auth ? (
@@ -39,6 +29,7 @@ class Routes extends Component {
         <Route exact path="/about" component={About} />
         <Route exact path="/projects" component={Projects} />
         <Route exact path="/addproject" component={AddProject} />
+        <Route component={NotFound} />
       </Switch>
     ) : null;
     return (
@@ -49,7 +40,6 @@ class Routes extends Component {
           component={this.props.auth && this.props.user ? Home : Login}
         />
         {authRoutes}}
-        <Route component={NotFound} />
       </Switch>
     );
   }
