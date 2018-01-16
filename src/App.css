@@ -24,6 +24,11 @@ header h1 {
   vertical-align: middle;
 }
 
+.menu li {
+  color: white;
+  padding: 1rem;
+}
+
 .container {
   width: 80vw;
 }

@@ -13,7 +13,7 @@ class Menu extends Component {
   render() {
     return (
       <nav style={styles.menuContainer}>
-        <ul className="flex direction-column">
+        <ul className="menu flex direction-column">
           <Link to="/">
             <li>Home</li>
           </Link>

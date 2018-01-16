@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import firebase from 'firebase';
 
 const styles = {
   home: {
@@ -20,8 +21,24 @@ const styles = {
 };
 
 class Home extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      profilePic: ''
+    };
+  }
+
+  componentDidMount() {
+    var user = firebase.auth().currentUser;
+
+    if (user != null) {
+      let userInfo = user.providerData[0];
+      this.setState({ profilePic: userInfo.photoURL });
+    }
+  }
+
   render() {
-    console.log(this.props.user.photoURL);
     return (
       <div
         className="flex direction-column align-items-center justify-center"
@@ -31,7 +48,7 @@ class Home extends Component {
         <div style={styles.profilePicContainer}>
           <img
             style={styles.img}
-            src={this.props.user.photoURL}
+            src={this.state.profilePic}
             alt="profile pic"
           />
         </div>
