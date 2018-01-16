@@ -24,7 +24,8 @@ class AddProject extends Component {
     this.state = {
       projectDescription: '',
       projectTitle: '',
-      projectImage: ''
+      projectImage: '',
+      loading: false
     };
   }
 
@@ -43,6 +44,10 @@ class AddProject extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
+    this.setState({
+      loading: true
+    });
+
     let projectImage = this.state.projectImage;
 
     const storageRef = firebase.storage().ref();
@@ -53,9 +58,7 @@ class AddProject extends Component {
 
     imagesRef.put(projectImage).on(
       'state_changed',
-      snapshot => {
-        console.log(snapshot);
-      },
+      snapshot => {},
       error => {
         console.log(error);
       },
@@ -66,7 +69,8 @@ class AddProject extends Component {
             let item = {
               title: this.state.projectTitle,
               description: this.state.projectDescription,
-              image: url
+              image: url,
+              imageName: this.state.projectImage.name
             };
 
             itemsRef.push(item);
@@ -112,10 +116,12 @@ class AddProject extends Component {
                     onChange={this.handleChange}
                   />
                   <div className="flex justify-around">
-                    <button style={styles.button}>Add Project</button>
+                    <button style={styles.button}>
+                      {this.state.loading ? 'Loading...' : 'Cancel'}
+                    </button>
 
                     <button style={styles.button} onClick={this.backToProjects}>
-                      Cancel
+                      Add Project
                     </button>
                   </div>
                 </form>

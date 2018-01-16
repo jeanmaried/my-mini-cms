@@ -61,23 +61,23 @@ class Projects extends Component {
       let projects = snapshot.val();
 
       for (let project in projects) {
-        // let imageName = projects[project].image;
         newState.push({
           id: project,
           title: projects[project].title,
           description: projects[project].description,
-          image: projects[project].image
+          image: projects[project].image,
+          imageName: projects[project].imageName
         });
       }
       this.props.dispatch(getAllProjects(newState));
     });
   }
 
-  removeItem = item => {
+  removeItem = project => {
     const storageRef = firebase
       .storage()
       .ref()
-      .child('project_images/' + item.imageName);
+      .child(project.imageName);
     storageRef
       .delete()
       .then(function() {
@@ -87,7 +87,7 @@ class Projects extends Component {
         console.log('Uh-oh, an error occurred!');
       });
 
-    const itemRef = firebase.database().ref(`/projects/${item.id}`);
+    const itemRef = firebase.database().ref(`/projects/${project.id}`);
     itemRef.remove();
   };
 
