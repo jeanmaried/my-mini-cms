@@ -15,22 +15,6 @@ import './App.css';
 import './flex.css';
 
 class App extends Component {
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     user: null,
-  //     authenticated: false
-  //   };
-  // }
-
-  // componentDidMount() {
-  //   auth.onAuthStateChanged(user => {
-  //     if (user) {
-  //       this.setState({ user });
-  //     }
-  //   });
-  // }
-
   render() {
     return (
       <div className="app">

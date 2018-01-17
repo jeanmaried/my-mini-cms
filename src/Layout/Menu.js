@@ -1,15 +1,28 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
+import firebase, { auth, provider } from '../firebase';
+import { getNoAuth } from '../redux/modules/items';
+import { connect } from 'react-redux';
 
 const styles = {
   menuContainer: {
     minHeight: '100%',
     width: '20vw',
-    background: '#fa6900'
+    background: 'red'
+  },
+
+  logout: {
+    cursor: 'pointer'
   }
 };
 
 class Menu extends Component {
+  logout = () => {
+    auth.signOut().then(() => {
+      this.props.dispatch(getNoAuth());
+    });
+    this.props.history.push('/');
+  };
   render() {
     return (
       <nav style={styles.menuContainer}>
@@ -23,10 +36,19 @@ class Menu extends Component {
           <Link to="/projects">
             <li>Projects</li>
           </Link>
+          {this.props.auth ? (
+            <li style={styles.logout} onClick={this.logout} className="flex">
+              Log Out
+            </li>
+          ) : null}
         </ul>
       </nav>
     );
   }
 }
 
-export default Menu;
+const mapStateToProps = ({ stateItems }) => ({
+  auth: stateItems.authenticated
+});
+
+export default withRouter(connect(mapStateToProps)(Menu));

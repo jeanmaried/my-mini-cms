@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import firebase from 'firebase';
 
 const styles = {
   home: {
-    width: '100%',
-    margin: '20vh'
+    width: '80vw',
+    minHeight: '100vh',
+    paddingTop: '10vh'
   },
 
   profilePicContainer: {
@@ -15,41 +15,23 @@ const styles = {
   },
 
   img: {
-    borderRadius: '50%',
     maxWidth: '100%'
   }
 };
 
 class Home extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      profilePic: ''
-    };
-  }
-
-  componentDidMount() {
-    var user = firebase.auth().currentUser;
-
-    if (user != null) {
-      let userInfo = user.providerData[0];
-      this.setState({ profilePic: userInfo.photoURL });
-    }
-  }
-
   render() {
     return (
       <div
-        className="flex direction-column align-items-center justify-center"
+        className="flex direction-column align-items-center"
         style={styles.home}
       >
         <h1 className="text-align">Welcome to your very own CMS</h1>
         <div style={styles.profilePicContainer}>
           <img
             style={styles.img}
-            src={this.state.profilePic}
-            alt="profile pic"
+            src={require('../assets/red-rocket.png')}
+            alt="hello pic"
           />
         </div>
       </div>
@@ -57,9 +39,4 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = ({ stateItems }) => ({
-  toggle: stateItems.toggleNewProject,
-  user: stateItems.userInfo
-});
-
-export default connect(mapStateToProps)(Home);
+export default Home;

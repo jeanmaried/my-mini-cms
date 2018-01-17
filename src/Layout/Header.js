@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import firebase, { auth, provider } from '../firebase';
+import firebase from 'firebase';
+import { auth, provider } from '../firebase';
 import { withRouter, Link } from 'react-router-dom';
 import { getNoAuth } from '../redux/modules/items';
 import { connect } from 'react-redux';
@@ -9,33 +10,70 @@ const styles = {
     padding: '20px 15px 20px 15px'
   },
 
-  button: {
-    width: '100vw'
+  flag: {
+    height: 40,
+    paddingLeft: 5,
+    paddingRight: 5
+  },
+
+  flagHolder: {
+    cursor: 'pointer'
+  },
+
+  profilePicContainer: {
+    // padding: 50,
+    width: 40,
+    height: 40
+  },
+
+  img: {
+    borderRadius: '50%',
+    maxWidth: '100%'
   }
 };
 
 class Header extends Component {
-  logout = () => {
-    auth.signOut().then(() => {
-      this.props.dispatch(getNoAuth());
+  constructor() {
+    super();
+
+    this.state = {
+      profilePic: ''
+    };
+  }
+
+  componentDidMount() {
+    auth.onAuthStateChanged(userData => {
+      if (userData) {
+        const user = firebase.auth().currentUser;
+
+        if (user != null) {
+          let userInfo = user.providerData[0];
+          this.setState({ profilePic: userInfo.photoURL });
+          console.log(user);
+        }
+      }
     });
-    this.props.history.push('/');
-  };
+  }
 
   render() {
     return (
-      <header style={styles.header} className="flex">
+      <header style={styles.header}>
         {this.props.auth ? (
-          <div className="flex justify-between">
-            <i className="fa fa-rocket" aria-hidden="true" />
-            <Link to="/">
-              <h1>JoDalmasso.com</h1>
-            </Link>
-          </div>
-        ) : null}
-        {this.props.auth ? (
-          <div style={styles.button} className="flex justify-end">
-            <button onClick={this.logout}>Log Out</button>
+          <div className="flex direction-row justify-between">
+            <div className="flex">
+              <i className="fa fa-rocket" aria-hidden="true" />
+              <Link to="/">
+                <h1>JoDalmasso.com</h1>
+              </Link>
+            </div>
+
+            <div style={styles.profilePicContainer}>
+              <img
+                style={styles.img}
+                src={this.state.profilePic}
+                alt="profile pic"
+              />
+            </div>
           </div>
         ) : null}
       </header>

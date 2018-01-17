@@ -6,7 +6,7 @@ body {
 footer,
 header {
   color: #fff;
-  background-color: #103d5d;
+  background-color: #292f33;
   padding: 33px 0 25px 15px;
 }
 
@@ -27,6 +27,17 @@ header h1 {
 .menu li {
   color: white;
   padding: 1rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+
+.menu li:hover {
+  background-color: rgb(194, 3, 3);
+}
+
+.menu li:active {
+  background-color: rgb(194, 3, 3);
+  box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transform: translateY(4px);
 }
 
 .container {
@@ -45,7 +56,7 @@ header i {
 
 .add-item {
   border-radius: 2px;
-  border-top: 3px solid #103d5d;
+  border-top: 3px solid #292f33;
   background-color: rgb(237, 237, 237);
   padding: 60px 18px;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
@@ -79,6 +90,7 @@ textarea {
   border: 0;
   display: block;
   width: 100%;
+  outline: none;
 }
 
 .fa {
@@ -112,7 +124,8 @@ a {
   color: white;
 }
 
-h2 {
+h2,
+h3 {
   padding: 0;
   margin: 0;
   font-weight: 400;
@@ -130,7 +143,7 @@ form button {
 button {
   border-radius: 2px;
   min-width: 88px;
-  background-color: #fa6900;
+  background-color: red;
   cursor: pointer;
   border: 0;
   min-width: 120px;
@@ -138,4 +151,15 @@ button {
   font-size: 14px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   padding: 10px 6px;
+  outline: none;
+}
+
+button:hover {
+  background-color: rgb(194, 3, 3);
+}
+
+button:active {
+  background-color: rgb(194, 3, 3);
+  box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transform: translateY(4px);
 }

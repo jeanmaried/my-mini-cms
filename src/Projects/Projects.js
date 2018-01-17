@@ -30,7 +30,7 @@ const styles = {
   },
 
   project_header: {
-    backgroundColor: '#103d5d',
+    backgroundColor: '#292f33',
     margin: 0,
     color: '#fff',
     fontWeight: '300',
@@ -121,7 +121,7 @@ class Projects extends Component {
                             >
                               <div
                                 style={styles.project_header}
-                                className="flex justify-between"
+                                className="flex justify-between align-items-center"
                               >
                                 <h3>{project.title}</h3>
                                 <button
