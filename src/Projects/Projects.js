@@ -26,7 +26,8 @@ const styles = {
   },
 
   img: {
-    height: 200
+    height: 200,
+    maxWidth: '40vw'
   },
 
   project_header: {
@@ -35,6 +36,10 @@ const styles = {
     color: '#fff',
     fontWeight: '300',
     padding: 15
+  },
+
+  links: {
+    width: '40vw'
   }
 };
 
@@ -61,12 +66,10 @@ class Projects extends Component {
       let projects = snapshot.val();
 
       for (let project in projects) {
+        let projectInfo = projects[project];
+        projectInfo.id = project;
         newState.push({
-          id: project,
-          title: projects[project].title,
-          description: projects[project].description,
-          image: projects[project].image,
-          imageName: projects[project].imageName
+          projectInfo
         });
       }
       this.props.dispatch(getAllProjects(newState));
@@ -113,29 +116,44 @@ class Projects extends Component {
                   <ul>
                     {this.props.projects
                       ? this.props.projects.map(project => {
+                          let projectInfo = project.projectInfo;
+                          console.log(projectInfo);
                           return (
                             <li
                               style={styles.projectContainer}
                               className="items"
-                              key={project.id}
+                              key={projectInfo.id}
                             >
                               <div
                                 style={styles.project_header}
                                 className="flex justify-between align-items-center"
                               >
-                                <h3>{project.title}</h3>
+                                <h3>{projectInfo.title}</h3>
                                 <button
                                   onClick={() => this.removeItem(project)}
                                 >
                                   Remove
                                 </button>
                               </div>
-                              <p>Description: {project.description}</p>
-                              <img
-                                src={project.image}
-                                style={styles.img}
-                                alt="project image"
-                              />
+                              <p>Description: {projectInfo.description}</p>
+                              <div className="flex justify-between">
+                                <img
+                                  src={projectInfo.image}
+                                  style={styles.img}
+                                  alt="project image"
+                                />
+                                <div style={styles.links}>
+                                  <div style={styles.project_header}>
+                                    <h3>Links</h3>
+                                  </div>
+                                  <a href={projectInfo.websiteURL}>
+                                    <p>{projectInfo.websiteURL}</p>
+                                  </a>
+                                  <a href={projectInfo.githubURL}>
+                                    <p>{projectInfo.githubURL}</p>
+                                  </a>
+                                </div>
+                              </div>
                             </li>
                           );
                         })

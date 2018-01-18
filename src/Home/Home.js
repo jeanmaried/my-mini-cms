@@ -11,7 +11,10 @@ const styles = {
   profilePicContainer: {
     padding: 50,
     width: 130,
-    height: 130
+    height: 130,
+    borderRadius: '50%',
+    background: '#dee4e9',
+    marginTop: '5vh'
   },
 
   img: {

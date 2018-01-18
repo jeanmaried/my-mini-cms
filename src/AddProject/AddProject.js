@@ -25,6 +25,8 @@ class AddProject extends Component {
       projectDescription: '',
       projectTitle: '',
       projectImage: '',
+      websiteURL: '',
+      githubURL: '',
       loading: false
     };
   }
@@ -69,8 +71,10 @@ class AddProject extends Component {
             let item = {
               title: this.state.projectTitle,
               description: this.state.projectDescription,
-              image: url,
-              imageName: this.state.projectImage.name
+              imageName: this.state.projectImage.name,
+              websiteURL: this.state.websiteURL,
+              githubURL: this.state.githubURL,
+              image: url
             };
 
             itemsRef.push(item);
@@ -108,6 +112,22 @@ class AddProject extends Component {
                     style={styles.description}
                     onChange={this.handleChange}
                     value={this.state.projectDescription}
+                  />
+                  <input
+                    type="text"
+                    name="websiteURL"
+                    placeholder="Website URL"
+                    // style={styles.description}
+                    onChange={this.handleChange}
+                    value={this.state.websiteURL}
+                  />
+                  <input
+                    type="text"
+                    name="githubURL"
+                    placeholder="GitHub Url"
+                    // style={styles.description}
+                    onChange={this.handleChange}
+                    value={this.state.githubURL}
                   />
                   <input
                     type="file"
