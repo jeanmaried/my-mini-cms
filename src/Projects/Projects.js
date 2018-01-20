@@ -130,7 +130,7 @@ class Projects extends Component {
                 <div className="wrapper">
                   <ul>
                     {this.props.projects
-                      ? this.props.projects.map(project => {
+                      ? this.props.projects.reverse().map(project => {
                           let projectInfo = project.projectInfo;
 
                           return (
