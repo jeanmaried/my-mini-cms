@@ -15,6 +15,14 @@ const styles = {
 
   button: {
     width: 200
+  },
+
+  languageContainer: {
+    width: '35vw'
+  },
+
+  languageTitle: {
+    padding: '2rem'
   }
 };
 
@@ -23,7 +31,9 @@ class About extends Component {
     super();
     this.state = {
       aboutTitle: '',
-      aboutContent: ''
+      aboutContent: '',
+      aboutTitleFr: '',
+      aboutContentFr: ''
     };
   }
 
@@ -36,7 +46,9 @@ class About extends Component {
         newState
           ? this.setState({
               aboutTitle: newState.title,
-              aboutContent: newState.content
+              aboutContent: newState.content,
+              aboutTitleFr: newState.titleFr,
+              aboutContentFr: newState.contentFr
             })
           : null;
       }
@@ -54,7 +66,9 @@ class About extends Component {
     const itemsRef = firebase.database().ref('about');
     const item = {
       title: this.state.aboutTitle,
-      content: this.state.aboutContent
+      content: this.state.aboutContent,
+      titleFr: this.state.aboutTitleFr,
+      contentFr: this.state.aboutContentFr
     };
     itemsRef.update(item);
   };
@@ -66,20 +80,46 @@ class About extends Component {
         <div className="container flex direction-column">
           <section className="add-item">
             <form onSubmit={this.handleSubmit}>
-              <input
-                type="text"
-                name="aboutTitle"
-                placeholder="Title"
-                onChange={this.handleChange}
-                value={this.state.aboutTitle}
-              />
-              <textarea
-                name="aboutContent"
-                placeholder="Content"
-                style={styles.description}
-                onChange={this.handleChange}
-                value={this.state.aboutContent}
-              />
+              <div className="flex justify-between">
+                <div style={styles.languageContainer}>
+                  <h2 style={styles.languageTitle} className="text-align">
+                    English
+                  </h2>
+                  <input
+                    type="text"
+                    name="aboutTitle"
+                    placeholder="Title"
+                    onChange={this.handleChange}
+                    value={this.state.aboutTitle}
+                  />
+                  <textarea
+                    name="aboutContent"
+                    placeholder="Content"
+                    style={styles.description}
+                    onChange={this.handleChange}
+                    value={this.state.aboutContent}
+                  />
+                </div>
+                <div style={styles.languageContainer}>
+                  <h2 style={styles.languageTitle} className="text-align">
+                    Français
+                  </h2>{' '}
+                  <input
+                    type="text"
+                    name="aboutTitleFr"
+                    placeholder="Titre"
+                    onChange={this.handleChange}
+                    value={this.state.aboutTitleFr}
+                  />
+                  <textarea
+                    name="aboutContentFr"
+                    placeholder="Contenu"
+                    style={styles.description}
+                    onChange={this.handleChange}
+                    value={this.state.aboutContentFr}
+                  />
+                </div>
+              </div>
               <div className="flex justify-center">
                 <button style={styles.button}>Submit Changes</button>
               </div>

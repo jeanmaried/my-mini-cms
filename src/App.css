@@ -5,7 +5,7 @@ body {
 
 footer,
 header {
-  color: #fff;
+  color: white;
   background-color: #292f33;
   padding: 33px 0 25px 15px;
 }
@@ -22,6 +22,11 @@ header h1 {
   display: inline-block;
   margin: 0;
   vertical-align: middle;
+  color: white;
+}
+
+footer a {
+  color: white;
 }
 
 .menu li {
@@ -58,7 +63,7 @@ header i {
   border-radius: 2px;
   border-top: 3px solid #292f33;
   background-color: rgb(237, 237, 237);
-  padding: 60px 18px;
+  padding: 0 18px 60px 18px;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
     0 3px 3px -2px rgba(0, 0, 0, 0.12), 0 1px 8px 0 rgba(0, 0, 0, 0.2);
   margin-bottom: 34px;

@@ -13,8 +13,16 @@ import AddProject from '../AddProject';
 const styles = {
   projectContainer: {
     width: '80vw',
-    minHeight: '100vh',
-    borderBottom: '3px solid #103d5d'
+    minHeight: '100vh'
+  },
+
+  listItem: {
+    width: '80vw',
+    boxShadow: '0 2px 5px 0 rgba(0, 0, 0, 0.50)',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: '2rem',
+    marginTop: '2rem'
   },
 
   description: {
@@ -40,6 +48,10 @@ const styles = {
 
   links: {
     width: '40vw'
+  },
+
+  siteLinks: {
+    textDecoration: 'underline'
   }
 };
 
@@ -77,10 +89,12 @@ class Projects extends Component {
   }
 
   removeItem = project => {
+    let projectInfo = project.projectInfo;
     const storageRef = firebase
       .storage()
       .ref()
-      .child(project.imageName);
+      .child(projectInfo.imageName);
+
     storageRef
       .delete()
       .then(function() {
@@ -90,7 +104,8 @@ class Projects extends Component {
         console.log('Uh-oh, an error occurred!');
       });
 
-    const itemRef = firebase.database().ref(`/projects/${project.id}`);
+    const itemRef = firebase.database().ref(`/projects/${projectInfo.id}`);
+
     itemRef.remove();
   };
 
@@ -117,10 +132,10 @@ class Projects extends Component {
                     {this.props.projects
                       ? this.props.projects.map(project => {
                           let projectInfo = project.projectInfo;
-                          console.log(projectInfo);
+
                           return (
                             <li
-                              style={styles.projectContainer}
+                              style={styles.listItem}
                               className="items"
                               key={projectInfo.id}
                             >
@@ -128,7 +143,7 @@ class Projects extends Component {
                                 style={styles.project_header}
                                 className="flex justify-between align-items-center"
                               >
-                                <h3>{projectInfo.title}</h3>
+                                <h3>EN: {projectInfo.title}</h3>
                                 <button
                                   onClick={() => this.removeItem(project)}
                                 >
@@ -136,6 +151,13 @@ class Projects extends Component {
                                 </button>
                               </div>
                               <p>Description: {projectInfo.description}</p>
+                              <div
+                                style={styles.project_header}
+                                className="flex justify-between align-items-center"
+                              >
+                                <h3>FR: {projectInfo.titleFr}</h3>
+                              </div>
+                              <p>Description: {projectInfo.descriptionFr}</p>
                               <div className="flex justify-between">
                                 <img
                                   src={projectInfo.image}
@@ -146,13 +168,36 @@ class Projects extends Component {
                                   <div style={styles.project_header}>
                                     <h3>Links</h3>
                                   </div>
-                                  <a href={projectInfo.websiteURL}>
-                                    <p>{projectInfo.websiteURL}</p>
-                                  </a>
-                                  <a href={projectInfo.githubURL}>
-                                    <p>{projectInfo.githubURL}</p>
-                                  </a>
+
+                                  <p>
+                                    Website:{' '}
+                                    <a
+                                      style={styles.siteLinks}
+                                      href={projectInfo.websiteURL}
+                                      target="_blank"
+                                    >
+                                      {projectInfo.websiteURL}
+                                    </a>
+                                  </p>
+
+                                  <p>
+                                    GitHub:{' '}
+                                    <a
+                                      style={styles.siteLinks}
+                                      href={projectInfo.githubURL}
+                                      target="_blank"
+                                    >
+                                      {projectInfo.githubURL}
+                                    </a>
+                                  </p>
+                                  {/* {add names of links} */}
                                 </div>
+                              </div>
+                              <div>
+                                <div style={styles.project_header}>
+                                  <h3>Tags</h3>
+                                </div>
+                                <p>{projectInfo.projectTags}</p>
                               </div>
                             </li>
                           );

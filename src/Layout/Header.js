@@ -49,7 +49,6 @@ class Header extends Component {
         if (user != null) {
           let userInfo = user.providerData[0];
           this.setState({ profilePic: userInfo.photoURL });
-          console.log(user);
         }
       }
     });

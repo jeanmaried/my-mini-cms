@@ -15,6 +15,14 @@ const styles = {
 
   button: {
     width: 200
+  },
+
+  containerByLanguage: {
+    width: '35vw'
+  },
+
+  languageTitle: {
+    padding: '2rem'
   }
 };
 
@@ -24,8 +32,11 @@ class AddProject extends Component {
     this.state = {
       projectDescription: '',
       projectTitle: '',
+      projectDescriptionFr: '',
+      projectTitleFr: '',
       projectImage: '',
       websiteURL: '',
+      projectTags: '',
       githubURL: '',
       loading: false
     };
@@ -71,9 +82,12 @@ class AddProject extends Component {
             let item = {
               title: this.state.projectTitle,
               description: this.state.projectDescription,
+              titleFr: this.state.projectTitleFr,
+              descriptionFr: this.state.projectDescriptionFr,
               imageName: this.state.projectImage.name,
               websiteURL: this.state.websiteURL,
               githubURL: this.state.githubURL,
+              projectTags: this.state.projectTags,
               image: url
             };
 
@@ -99,35 +113,66 @@ class AddProject extends Component {
             <div className="container flex direction-column">
               <section className="add-item">
                 <form onSubmit={this.handleSubmit}>
-                  <input
-                    type="text"
-                    name="projectTitle"
-                    placeholder="Title"
-                    onChange={this.handleChange}
-                    value={this.state.projectTitle}
-                  />
-                  <textarea
-                    name="projectDescription"
-                    placeholder="Description"
-                    style={styles.description}
-                    onChange={this.handleChange}
-                    value={this.state.projectDescription}
-                  />
+                  <div className="flex justify-between">
+                    <div style={styles.containerByLanguage}>
+                      <h2 style={styles.languageTitle} className="text-align">
+                        English
+                      </h2>
+                      <input
+                        type="text"
+                        name="projectTitle"
+                        placeholder="Title"
+                        onChange={this.handleChange}
+                        value={this.state.projectTitle}
+                      />
+                      <textarea
+                        name="projectDescription"
+                        placeholder="Description"
+                        style={styles.description}
+                        onChange={this.handleChange}
+                        value={this.state.projectDescription}
+                      />
+                    </div>
+                    <div style={styles.containerByLanguage}>
+                      <h2 style={styles.languageTitle} className="text-align">
+                        Français
+                      </h2>
+                      <input
+                        type="text"
+                        name="projectTitleFr"
+                        placeholder="Titre"
+                        onChange={this.handleChange}
+                        value={this.state.projectTitleFr}
+                      />
+                      <textarea
+                        name="projectDescriptionFr"
+                        placeholder="Description"
+                        style={styles.description}
+                        onChange={this.handleChange}
+                        value={this.state.projectDescriptionFr}
+                      />
+                    </div>
+                  </div>
                   <input
                     type="text"
                     name="websiteURL"
                     placeholder="Website URL"
-                    // style={styles.description}
                     onChange={this.handleChange}
                     value={this.state.websiteURL}
                   />
                   <input
                     type="text"
                     name="githubURL"
-                    placeholder="GitHub Url"
-                    // style={styles.description}
+                    placeholder="GitHub URL"
                     onChange={this.handleChange}
                     value={this.state.githubURL}
+                  />
+                  <input
+                    type="text"
+                    name="projectTags"
+                    placeholder="Tags"
+                    onChange={this.handleChange}
+                    value={this.state.projectTags}
                   />
                   <input
                     type="file"
