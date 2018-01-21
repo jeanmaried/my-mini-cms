@@ -74,11 +74,6 @@ class EditProject extends Component {
 
     let projectKey = this.props.editProject;
 
-    itemsRef.on('value', snapshot => {
-      let projects = snapshot.val();
-
-      console.log(projects);
-    });
     if (this.state.image) {
       let image = this.state.image;
       const storageRef = firebase.storage().ref();
