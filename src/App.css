@@ -45,10 +45,6 @@ footer a {
   transform: translateY(4px);
 }
 
-.container {
-  width: 80vw;
-}
-
 .fa {
   font-size: 22px;
   transform: translateY(50deg);
@@ -96,6 +92,7 @@ textarea {
   display: block;
   width: 100%;
   outline: none;
+  resize: none;
 }
 
 .fa {

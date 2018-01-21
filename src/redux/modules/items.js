@@ -4,6 +4,7 @@ const GET_PROJECT = 'GET_PROJECT';
 const GET_ALL_PROJECTS = 'GET_ALL_PROJECTS';
 const GET_TOGGLE = 'GET_TOGGLE';
 const GET_UNTOGGLE = 'GET_UNTOGGLE';
+const GET_EDIT_PROJECT = 'GET_EDIT_PROJECT';
 
 export const getNoAuth = () => ({
   type: GET_NO_AUTH
@@ -24,21 +25,18 @@ export const getAllProjects = projects => ({
   payload: projects
 });
 
-// export const getToggle = () => ({
-//   type: GET_TOGGLE
-// });
-
-// export const getUnToggle = () => ({
-//   type: GET_UNTOGGLE
-// });
+export const getEditProject = project => ({
+  type: GET_EDIT_PROJECT,
+  payload: project
+});
 
 export default (
   state = {
     authenticated: false,
     userInfo: {},
     project: {},
-    projects: undefined
-    // toggleNewProject: false
+    projects: undefined,
+    editProject: ''
   },
   action
 ) => {
@@ -51,10 +49,8 @@ export default (
       return { ...state, project: {} };
     case GET_ALL_PROJECTS:
       return { ...state, projects: action.payload };
-    // case GET_TOGGLE:
-    //   return { ...state, toggleNewProject: true };
-    // case GET_UNTOGGLE:
-    //   return { ...state, toggleNewProject: false };
+    case GET_EDIT_PROJECT:
+      return { ...state, editProject: action.payload };
     default:
       return state;
   }

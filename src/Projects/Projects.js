@@ -9,6 +9,7 @@ import {
   getAllProjects
 } from '../redux/modules/items';
 import AddProject from '../AddProject';
+import { getEditProject } from '../redux/modules/items';
 
 const styles = {
   projectContainer: {
@@ -113,6 +114,12 @@ class Projects extends Component {
     this.props.history.push('/addproject');
   };
 
+  editItem = project => {
+    let projectId = project.projectInfo.id;
+    this.props.dispatch(getEditProject(projectId));
+    this.props.history.push('/editproject');
+  };
+
   render() {
     return (
       <div style={styles.projectContainer}>
@@ -148,6 +155,9 @@ class Projects extends Component {
                                   onClick={() => this.removeItem(project)}
                                 >
                                   Remove
+                                </button>
+                                <button onClick={() => this.editItem(project)}>
+                                  Edit
                                 </button>
                               </div>
                               <p>Description: {projectInfo.description}</p>
