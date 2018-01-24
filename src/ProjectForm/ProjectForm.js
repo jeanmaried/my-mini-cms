@@ -17,12 +17,8 @@ const styles = {
     width: 200
   },
 
-  languagesContainer: {
-    width: '100%'
-  },
-
   containerByLanguage: {
-    width: '47%'
+    width: '35vw'
   },
 
   languageTitle: {
@@ -30,7 +26,7 @@ const styles = {
   }
 };
 
-class EditProject extends Component {
+class ProjectForm extends Component {
   constructor() {
     super();
     this.state = {
@@ -67,17 +63,67 @@ class EditProject extends Component {
       loading: true
     });
 
-    const itemsRef = firebase
-      .database()
-      .ref('projects')
-      .child(this.state.id);
+    let projectKey = this.state.id;
 
-    let projectKey = this.props.editProject;
+    let image = this.state.image;
 
-    if (this.state.image) {
-      let image = this.state.image;
+    if (this.props.location.pathname !== '/addproject') {
+      const itemsRef = firebase
+        .database()
+        .ref('projects')
+        .child(projectKey);
+
+      if (image) {
+        const storageRef = firebase.storage().ref();
+        const imagesRef = storageRef.child(image.name);
+        imagesRef.put(image).on(
+          'state_changed',
+          snapshot => {},
+          error => {
+            console.log(error);
+          },
+          () => {
+            imagesRef
+              .getDownloadURL()
+              .then(url => {
+                let item = {
+                  title: this.state.title,
+                  description: this.state.description,
+                  titleFr: this.state.titleFr,
+                  descriptionFr: this.state.descriptionFr,
+                  imageName: this.state.image.name,
+                  websiteURL: this.state.websiteURL,
+                  githubURL: this.state.githubURL,
+                  projectTags: this.state.projectTags,
+                  image: url
+                };
+
+                itemsRef.update(item);
+
+                this.props.history.push('/projects');
+              })
+              .catch(error => {});
+          }
+        );
+      } else {
+        itemsRef.update({
+          title: this.state.title,
+          description: this.state.description,
+          titleFr: this.state.titleFr,
+          descriptionFr: this.state.descriptionFr,
+          websiteURL: this.state.websiteURL,
+          githubURL: this.state.githubURL,
+          projectTags: this.state.projectTags
+        });
+        this.props.history.push('/projects');
+      }
+    } else {
       const storageRef = firebase.storage().ref();
+
       const imagesRef = storageRef.child(image.name);
+
+      const itemsRef = firebase.database().ref('projects');
+
       imagesRef.put(image).on(
         'state_changed',
         snapshot => {},
@@ -88,7 +134,7 @@ class EditProject extends Component {
           imagesRef
             .getDownloadURL()
             .then(url => {
-              itemsRef.update({
+              let item = {
                 title: this.state.title,
                 description: this.state.description,
                 titleFr: this.state.titleFr,
@@ -98,34 +144,28 @@ class EditProject extends Component {
                 githubURL: this.state.githubURL,
                 projectTags: this.state.projectTags,
                 image: url
-              });
+              };
+
+              itemsRef.push(item);
 
               this.props.history.push('/projects');
             })
             .catch(error => {});
         }
       );
-    } else {
-      itemsRef.update({
-        title: this.state.title,
-        description: this.state.description,
-        titleFr: this.state.titleFr,
-        descriptionFr: this.state.descriptionFr,
-        websiteURL: this.state.websiteURL,
-        githubURL: this.state.githubURL,
-        projectTags: this.state.projectTags
-      });
-      this.props.history.push('/projects');
     }
   };
 
-  componentWillMount() {
-    this.props.editProject ? null : this.props.history.push('/projects');
-  }
-
   componentDidMount() {
-    if (this.props.editProject) {
-      let projectKey = this.props.editProject;
+    if (this.props.location.pathname !== '/addproject') {
+      let editProject = this.props.location.pathname;
+
+      let projectKey = editProject.slice(13);
+
+      this.setState({
+        id: projectKey
+      });
+
       const projectsRef = firebase.database().ref('projects');
 
       projectsRef.on('value', snapshot => {
@@ -144,8 +184,6 @@ class EditProject extends Component {
           projectTags: projectData.projectTags
         });
       });
-    } else {
-      this.props.history.push('/projects');
     }
   }
 
@@ -154,19 +192,19 @@ class EditProject extends Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <div style={styles.projectContainer}>
-        <h1 className="text-align">Edit Project</h1>
-        {this.props.editProject ? (
+        <h1 className="text-align">
+          {this.props.location.pathname == '/addproject'
+            ? 'Add Project'
+            : 'Edit Project'}
+        </h1>
+        {this.props.user ? (
           <div>
             <div className="container flex direction-column">
               <section className="add-item">
                 <form onSubmit={this.handleSubmit}>
-                  <div
-                    style={styles.languagesContainer}
-                    className="flex justify-between"
-                  >
+                  <div className="flex justify-between">
                     <div style={styles.containerByLanguage}>
                       <h2 style={styles.languageTitle} className="text-align">
                         English
@@ -235,7 +273,11 @@ class EditProject extends Component {
                   />
                   <div className="flex justify-around">
                     <button style={styles.button}>
-                      {this.state.loading ? 'Loading...' : 'Save Changes'}
+                      {this.state.loading
+                        ? 'Loading...'
+                        : this.props.location.pathname == '/addproject'
+                          ? 'Add Project'
+                          : 'Edit Project'}
                     </button>
 
                     <button style={styles.button} onClick={this.backToProjects}>
@@ -255,8 +297,7 @@ class EditProject extends Component {
 const mapStateToProps = ({ stateItems }) => ({
   auth: stateItems.authenticated,
   user: stateItems.userInfo,
-  toggle: stateItems.toggleNewProject,
-  editProject: stateItems.editProject
+  toggle: stateItems.toggleNewProject
 });
 
-export default withRouter(connect(mapStateToProps)(EditProject));
+export default withRouter(connect(mapStateToProps)(ProjectForm));

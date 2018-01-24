@@ -8,8 +8,7 @@ import {
   getUser,
   getAllProjects
 } from '../redux/modules/items';
-import AddProject from '../AddProject';
-import { getEditProject } from '../redux/modules/items';
+import ProjectForm from '../ProjectForm';
 
 const styles = {
   projectContainer: {
@@ -116,8 +115,7 @@ class Projects extends Component {
 
   editItem = project => {
     let projectId = project.projectInfo.id;
-    this.props.dispatch(getEditProject(projectId));
-    this.props.history.push('/editproject');
+    this.props.history.push(`/editproject/${projectId}`);
   };
 
   render() {
@@ -132,7 +130,7 @@ class Projects extends Component {
               </button>
             </div>
             <div className="container flex direction-column">
-              {this.props.toggle ? <AddProject /> : null}
+              {this.props.toggle ? <ProjectForm /> : null}
               <section className="display-project">
                 <div className="wrapper">
                   <ul>
@@ -200,7 +198,6 @@ class Projects extends Component {
                                       {projectInfo.githubURL}
                                     </a>
                                   </p>
-                                  {/* {add names of links} */}
                                 </div>
                               </div>
                               <div>
