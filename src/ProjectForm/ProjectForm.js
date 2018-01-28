@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import firebase, { auth, provider } from '../firebase';
+import firebase from '../firebase';
 import { connect } from 'react-redux';
-import { getUser, getToggle, getUnToggle } from '../redux/modules/items';
 import { withRouter } from 'react-router-dom';
 
 const styles = {
@@ -45,7 +44,7 @@ class ProjectForm extends Component {
   }
 
   handleChange = e => {
-    if (e.target.name == 'image') {
+    if (e.target.name === 'image') {
       this.setState({
         image: e.target.files[0]
       });
@@ -169,7 +168,6 @@ class ProjectForm extends Component {
       const projectsRef = firebase.database().ref('projects');
 
       projectsRef.on('value', snapshot => {
-        let newState = [];
         let projects = snapshot.val();
         let projectData = projects[projectKey];
         this.setState({
@@ -195,7 +193,7 @@ class ProjectForm extends Component {
     return (
       <div style={styles.projectContainer}>
         <h1 className="text-align">
-          {this.props.location.pathname == '/addproject'
+          {this.props.location.pathname === '/addproject'
             ? 'Add Project'
             : 'Edit Project'}
         </h1>
@@ -275,7 +273,7 @@ class ProjectForm extends Component {
                     <button style={styles.button}>
                       {this.state.loading
                         ? 'Loading...'
-                        : this.props.location.pathname == '/addproject'
+                        : this.props.location.pathname === '/addproject'
                           ? 'Add Project'
                           : 'Edit Project'}
                     </button>

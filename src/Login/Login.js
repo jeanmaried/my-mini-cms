@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import firebase, { auth, provider } from '../firebase';
+import { auth, provider } from '../firebase';
 import { withRouter } from 'react-router-dom';
 import { getUser } from '../redux/modules/items';
 import { connect } from 'react-redux';
-import { map } from '@firebase/util';
 
 const styles = {
   loginContainer: {

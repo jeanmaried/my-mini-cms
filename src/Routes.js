@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter, Route, Switch, withRouter } from 'react-router-dom';
-import Layout from './Layout';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import About from './About';
 import Projects from './Projects';
 import NotFound from './NotFound';
@@ -9,7 +8,7 @@ import Home from './Home';
 import ProjectForm from './ProjectForm';
 import { connect } from 'react-redux';
 import { getUser } from './redux/modules/items';
-import firebase, { auth, provider } from './firebase';
+import { auth } from './firebase';
 
 class Routes extends Component {
   componentDidMount() {

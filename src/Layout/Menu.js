@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import firebase, { auth, provider } from '../firebase';
+import { auth } from '../firebase';
 import { getNoAuth } from '../redux/modules/items';
 import { connect } from 'react-redux';
 

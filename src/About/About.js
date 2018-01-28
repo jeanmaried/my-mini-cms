@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import firebase, { auth, provider } from '../firebase';
+import firebase from '../firebase';
 import { connect } from 'react-redux';
-import { getUser } from '../redux/modules/items';
 
 const styles = {
   projectContainer: {
@@ -41,17 +40,12 @@ class About extends Component {
     const itemsRef = firebase.database().ref('about');
     itemsRef.on('value', snapshot => {
       let items = snapshot.val();
-      let newState = items;
-      {
-        newState
-          ? this.setState({
-              aboutTitle: newState.title,
-              aboutContent: newState.content,
-              aboutTitleFr: newState.titleFr,
-              aboutContentFr: newState.contentFr
-            })
-          : null;
-      }
+      this.setState({
+        aboutTitle: items.title,
+        aboutContent: items.content,
+        aboutTitleFr: items.titleFr,
+        aboutContentFr: items.contentFr
+      });
     });
   }
 

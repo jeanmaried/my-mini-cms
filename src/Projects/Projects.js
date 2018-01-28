@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import firebase, { auth, provider } from '../firebase';
+import firebase, { auth } from '../firebase';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {
-  getToggle,
-  getUnToggle,
-  getUser,
-  getAllProjects
-} from '../redux/modules/items';
+import { getUser, getAllProjects } from '../redux/modules/items';
 import ProjectForm from '../ProjectForm';
 
 const styles = {
@@ -170,7 +165,7 @@ class Projects extends Component {
                                 <img
                                   src={projectInfo.image}
                                   style={styles.img}
-                                  alt="project image"
+                                  alt=""
                                 />
                                 <div style={styles.links}>
                                   <div style={styles.project_header}>

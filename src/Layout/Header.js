@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import { auth, provider } from '../firebase';
+import { auth } from '../firebase';
 import { withRouter, Link } from 'react-router-dom';
-import { getNoAuth } from '../redux/modules/items';
 import { connect } from 'react-redux';
 
 const styles = {

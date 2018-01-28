@@ -2,9 +2,6 @@ const GET_NO_AUTH = 'GET_NO_AUTH';
 const GET_USER = 'GET_USER';
 const GET_PROJECT = 'GET_PROJECT';
 const GET_ALL_PROJECTS = 'GET_ALL_PROJECTS';
-const GET_TOGGLE = 'GET_TOGGLE';
-const GET_UNTOGGLE = 'GET_UNTOGGLE';
-// const GET_EDIT_PROJECT = 'GET_EDIT_PROJECT';
 
 export const getNoAuth = () => ({
   type: GET_NO_AUTH
