@@ -84,6 +84,7 @@ class Projects extends Component {
   }
 
   removeItem = project => {
+    console.log('remove');
     let projectInfo = project.projectInfo;
     const storageRef = firebase
       .storage()
@@ -101,7 +102,14 @@ class Projects extends Component {
 
     const itemRef = firebase.database().ref(`/projects/${projectInfo.id}`);
 
-    itemRef.remove();
+    itemRef
+      .remove()
+      .then(() => {
+        console.log('OK, gone');
+      })
+      .catch(e => {
+        console.log('OOPS, problem: ' + e.message);
+      });
   };
 
   addProject = () => {
@@ -163,7 +171,7 @@ class Projects extends Component {
                               <p>Description: {projectInfo.descriptionFr}</p>
                               <div className="flex justify-between">
                                 <img
-                                  src={projectInfo.image}
+                                  src={projectInfo.imageURL}
                                   style={styles.img}
                                   alt=""
                                 />
