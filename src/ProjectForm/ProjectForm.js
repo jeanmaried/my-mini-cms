@@ -90,7 +90,6 @@ class ProjectForm extends Component {
 
     if (this.props.location.pathname !== '/addproject') {
       if (image) {
-        console.log('image', image);
         const imagesRef = firebase
           .storage()
           .ref()
@@ -114,7 +113,6 @@ class ProjectForm extends Component {
         );
       } else {
         delete item.image;
-        console.log(item);
         itemsRef.child(this.state.id).update(item);
         this.props.history.push('/projects');
       }
@@ -134,7 +132,7 @@ class ProjectForm extends Component {
             .getDownloadURL()
             .then(url => {
               item.imageURL = url;
-              console.log(item);
+
               itemsRef.push(item);
               this.props.history.push('/projects');
             })
@@ -185,7 +183,6 @@ class ProjectForm extends Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <div style={styles.projectContainer}>
         <h1 className="text-align">
