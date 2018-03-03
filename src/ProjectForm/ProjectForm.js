@@ -47,7 +47,8 @@ class ProjectForm extends Component {
   handleChange = e => {
     if (e.target.name === 'image') {
       this.setState({
-        image: e.target.files[0]
+        image: e.target.files[0],
+        imageName: e.target.files[0].name
       });
     } else {
       this.setState({
@@ -89,6 +90,7 @@ class ProjectForm extends Component {
 
     if (this.props.location.pathname !== '/addproject') {
       if (image) {
+        console.log('image', image);
         const imagesRef = firebase
           .storage()
           .ref()
@@ -183,6 +185,7 @@ class ProjectForm extends Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <div style={styles.projectContainer}>
         <h1 className="text-align">

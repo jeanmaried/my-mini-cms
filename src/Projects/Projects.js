@@ -91,6 +91,8 @@ class Projects extends Component {
       .ref()
       .child(projectInfo.imageName);
 
+    console.log(projectInfo.imageName);
+
     storageRef
       .delete()
       .then(function() {
