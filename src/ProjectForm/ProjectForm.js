@@ -63,13 +63,13 @@ class ProjectForm extends Component {
       loading: true
     });
 
-    const item = {
+    let item = {
       title: this.state.title,
       description: this.state.description,
       titleFr: this.state.titleFr,
       descriptionFr: this.state.descriptionFr,
       image: this.state.image,
-      imageName: this.state.image.name,
+      imageName: this.state.imageName,
       imageURL: this.state.imageURL,
       websiteURL: this.state.websiteURL,
       githubURL: this.state.githubURL,
@@ -80,18 +80,19 @@ class ProjectForm extends Component {
 
     const image = this.state.image;
 
-    const imagesRef = firebase
-      .storage()
-      .ref()
-      .child(image.name);
+    // const imagesRef = firebase
+    //   .storage()
+    //   .ref()
+    //   .child(image.name);
+
+    const itemsRef = firebase.database().ref('projects');
 
     if (this.props.location.pathname !== '/addproject') {
-      const itemsRef = firebase
-        .database()
-        .ref('projects')
-        .child(projectKey);
-
       if (image) {
+        const imagesRef = firebase
+          .storage()
+          .ref()
+          .child(image.name);
         imagesRef.put(image).on(
           'state_changed',
           snapshot => {},
@@ -103,20 +104,23 @@ class ProjectForm extends Component {
               .getDownloadURL()
               .then(url => {
                 item.imageURL = url;
-
-                itemsRef.update(item);
+                itemsRef.child(projectKey).update(item);
                 this.props.history.push('/projects');
               })
               .catch(error => {});
           }
         );
       } else {
-        itemsRef.update(item);
+        delete item.image;
+        console.log(item);
+        itemsRef.child(this.state.id).update(item);
         this.props.history.push('/projects');
       }
     } else {
-      const itemsRef = firebase.database().ref('projects');
-
+      const imagesRef = firebase
+        .storage()
+        .ref()
+        .child(image.name);
       imagesRef.put(image).on(
         'state_changed',
         snapshot => {},
@@ -128,10 +132,8 @@ class ProjectForm extends Component {
             .getDownloadURL()
             .then(url => {
               item.imageURL = url;
-
               console.log(item);
               itemsRef.push(item);
-
               this.props.history.push('/projects');
             })
             .catch(error => {});
@@ -151,13 +153,14 @@ class ProjectForm extends Component {
         .on('value', snapshot => {
           let projects = snapshot.val();
           let projectData = projects[projectKey];
+
           this.setState({
             id: projectKey,
             title: projectData.title,
             description: projectData.description,
             titleFr: projectData.titleFr,
             descriptionFr: projectData.descriptionFr,
-            image: projectData.image,
+            // image: projectData.image,
             imageName: projectData.imageName,
             imageURL: projectData.imageURL,
             websiteURL: projectData.websiteURL,
