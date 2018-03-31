@@ -7,54 +7,51 @@ const styles = {
   projectContainer: {
     width: '80vw'
   },
-
-  description: {
+  descriptionStyle: {
     paddingBottom: 150
   },
-
   button: {
     width: 200
   },
-
   containerByLanguage: {
     width: '35vw'
   },
-
   languageTitle: {
     padding: '2rem'
   }
 };
 
 class ProjectForm extends Component {
-  constructor() {
-    super();
-    this.state = {
-      id: '',
-      title: '',
-      description: '',
-      titleFr: '',
-      descriptionFr: '',
-      image: '',
-      imageName: '',
-      imageURL: '',
-      websiteURL: '',
-      githubURL: '',
-      projectTags: '',
-      loading: false
-    };
-  }
+  state = {
+    id: '',
+    title: '',
+    description: '',
+    titleFr: '',
+    descriptionFr: '',
+    image: '',
+    imageName: '',
+    imageURL: '',
+    websiteURL: '',
+    githubURL: '',
+    projectTags: '',
+    loading: false
+  };
 
-  handleChange = e => {
-    if (e.target.name === 'image') {
-      this.setState({
-        image: e.target.files[0],
-        imageName: e.target.files[0].name
-      });
-    } else {
-      this.setState({
-        [e.target.name]: e.target.value
-      });
-    }
+  handleTextChange = e => {
+    const { name, value } = e.target;
+
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleImage = e => {
+    const { files } = e.target;
+
+    this.setState({
+      image: files[0],
+      imageName: files[0].name
+    });
   };
 
   handleSubmit = e => {
@@ -64,19 +61,31 @@ class ProjectForm extends Component {
       loading: true
     });
 
-    let item = {
-      title: this.state.title,
-      description: this.state.description,
-      titleFr: this.state.titleFr,
-      descriptionFr: this.state.descriptionFr,
-      imageName: this.state.imageName,
-      imageURL: this.state.imageURL,
-      websiteURL: this.state.websiteURL,
-      githubURL: this.state.githubURL,
-      projectTags: this.state.projectTags
-    };
+    const {
+      title,
+      description,
+      titleFr,
+      descriptionFr,
+      imageName,
+      imageURL,
+      websiteURL,
+      githubURL,
+      projectTags,
+      image,
+      id
+    } = this.state;
 
-    const { image, id } = this.state;
+    const item = {
+      title,
+      description,
+      titleFr,
+      descriptionFr,
+      imageName,
+      imageURL,
+      websiteURL,
+      githubURL,
+      projectTags
+    };
 
     const itemsRef = firebase.database().ref('projects');
 
@@ -98,15 +107,14 @@ class ProjectForm extends Component {
               .then(url => {
                 item.imageURL = url;
                 itemsRef.child(id).update(item);
-                this.props.history.push('/projects');
+                this.backToProjects();
               })
               .catch(error => {});
           }
         );
       } else {
-        // delete item.image;
-        itemsRef.child(this.state.id).update(item);
-        this.props.history.push('/projects');
+        itemsRef.child(id).update(item);
+        this.backToProjects();
       }
     } else {
       const imagesRef = firebase
@@ -124,9 +132,8 @@ class ProjectForm extends Component {
             .getDownloadURL()
             .then(url => {
               item.imageURL = url;
-
               itemsRef.push(item);
-              this.props.history.push('/projects');
+              this.backToProjects();
             })
             .catch(error => {});
         }
@@ -135,16 +142,16 @@ class ProjectForm extends Component {
   };
 
   componentDidMount() {
-    let editProject = this.props.location.pathname;
-    if (editProject !== '/addproject') {
-      let projectKey = editProject.slice(13);
+    const location = this.props.location.pathname;
+    if (location !== '/addproject') {
+      const id = location.slice(13);
 
       firebase
         .database()
         .ref('projects')
         .on('value', snapshot => {
-          let projects = snapshot.val();
-          const id = projects[projectKey];
+          const projects = snapshot.val();
+          const project = projects[id];
 
           const {
             title,
@@ -156,7 +163,7 @@ class ProjectForm extends Component {
             websiteURL,
             githubURL,
             projectTags
-          } = id;
+          } = project;
 
           this.setState({
             id,
@@ -186,12 +193,31 @@ class ProjectForm extends Component {
   };
 
   render() {
+    const { pathname } = this.props.location;
+
+    const {
+      projectContainer,
+      descriptionStyle,
+      button,
+      containerByLanguage,
+      languageTitle
+    } = styles;
+
+    const {
+      title,
+      description,
+      titleFr,
+      descriptionFr,
+      websiteURL,
+      githubURL,
+      projectTags,
+      loading
+    } = this.state;
+
     return (
-      <div style={styles.projectContainer}>
+      <div style={projectContainer}>
         <h1 className="text-align">
-          {this.props.location.pathname === '/addproject'
-            ? 'Add Project'
-            : 'Edit Project'}
+          {pathname === '/addproject' ? 'Add Project' : 'Edit Project'}
         </h1>
         {this.props.user ? (
           <div>
@@ -199,42 +225,42 @@ class ProjectForm extends Component {
               <section className="add-item">
                 <form onSubmit={this.handleSubmit}>
                   <div className="flex justify-between">
-                    <div style={styles.containerByLanguage}>
-                      <h2 style={styles.languageTitle} className="text-align">
+                    <div style={containerByLanguage}>
+                      <h2 style={languageTitle} className="text-align">
                         English
                       </h2>
                       <input
                         type="text"
                         name="title"
                         placeholder="Title"
-                        onChange={this.handleChange}
-                        value={this.state.title}
+                        onChange={this.handleTextChange}
+                        value={title}
                       />
                       <textarea
                         name="description"
                         placeholder="Description"
-                        style={styles.description}
-                        onChange={this.handleChange}
-                        value={this.state.description}
+                        style={descriptionStyle}
+                        onChange={this.handleTextChange}
+                        value={description}
                       />
                     </div>
-                    <div style={styles.containerByLanguage}>
-                      <h2 style={styles.languageTitle} className="text-align">
+                    <div style={containerByLanguage}>
+                      <h2 style={languageTitle} className="text-align">
                         Français
                       </h2>
                       <input
                         type="text"
                         name="titleFr"
                         placeholder="Titre"
-                        onChange={this.handleChange}
-                        value={this.state.titleFr}
+                        onChange={this.handleTextChange}
+                        value={titleFr}
                       />
                       <textarea
                         name="descriptionFr"
                         placeholder="Description"
-                        style={styles.description}
-                        onChange={this.handleChange}
-                        value={this.state.descriptionFr}
+                        style={descriptionStyle}
+                        onChange={this.handleTextChange}
+                        value={descriptionFr}
                       />
                     </div>
                   </div>
@@ -242,39 +268,39 @@ class ProjectForm extends Component {
                     type="text"
                     name="websiteURL"
                     placeholder="Website URL"
-                    onChange={this.handleChange}
-                    value={this.state.websiteURL}
+                    onChange={this.handleTextChange}
+                    value={websiteURL}
                   />
                   <input
                     type="text"
                     name="githubURL"
                     placeholder="GitHub URL"
-                    onChange={this.handleChange}
-                    value={this.state.githubURL}
+                    onChange={this.handleTextChange}
+                    value={githubURL}
                   />
                   <input
                     type="text"
                     name="projectTags"
                     placeholder="Tags"
-                    onChange={this.handleChange}
-                    value={this.state.projectTags}
+                    onChange={this.handleTextChange}
+                    value={projectTags}
                   />
                   <input
                     type="file"
                     name="image"
                     id="Image"
-                    onChange={this.handleChange}
+                    onChange={this.handleImage}
                   />
                   <div className="flex justify-around">
-                    <button style={styles.button}>
-                      {this.state.loading
+                    <button style={button}>
+                      {loading
                         ? 'Loading...'
-                        : this.props.location.pathname === '/addproject'
+                        : pathname === '/addproject'
                           ? 'Add Project'
                           : 'Edit Project'}
                     </button>
 
-                    <button style={styles.button} onClick={this.backToProjects}>
+                    <button style={button} onClick={this.backToProjects}>
                       Cancel
                     </button>
                   </div>
