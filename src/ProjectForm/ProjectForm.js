@@ -69,7 +69,6 @@ class ProjectForm extends Component {
       description: this.state.description,
       titleFr: this.state.titleFr,
       descriptionFr: this.state.descriptionFr,
-      image: this.state.image,
       imageName: this.state.imageName,
       imageURL: this.state.imageURL,
       websiteURL: this.state.websiteURL,
@@ -77,14 +76,7 @@ class ProjectForm extends Component {
       projectTags: this.state.projectTags
     };
 
-    const projectKey = this.state.id;
-
-    const image = this.state.image;
-
-    // const imagesRef = firebase
-    //   .storage()
-    //   .ref()
-    //   .child(image.name);
+    const { image, id } = this.state;
 
     const itemsRef = firebase.database().ref('projects');
 
@@ -105,14 +97,14 @@ class ProjectForm extends Component {
               .getDownloadURL()
               .then(url => {
                 item.imageURL = url;
-                itemsRef.child(projectKey).update(item);
+                itemsRef.child(id).update(item);
                 this.props.history.push('/projects');
               })
               .catch(error => {});
           }
         );
       } else {
-        delete item.image;
+        // delete item.image;
         itemsRef.child(this.state.id).update(item);
         this.props.history.push('/projects');
       }
@@ -152,20 +144,31 @@ class ProjectForm extends Component {
         .ref('projects')
         .on('value', snapshot => {
           let projects = snapshot.val();
-          let projectData = projects[projectKey];
+          const id = projects[projectKey];
+
+          const {
+            title,
+            description,
+            titleFr,
+            descriptionFr,
+            imageName,
+            imageURL,
+            websiteURL,
+            githubURL,
+            projectTags
+          } = id;
 
           this.setState({
-            id: projectKey,
-            title: projectData.title,
-            description: projectData.description,
-            titleFr: projectData.titleFr,
-            descriptionFr: projectData.descriptionFr,
-            // image: projectData.image,
-            imageName: projectData.imageName,
-            imageURL: projectData.imageURL,
-            websiteURL: projectData.websiteURL,
-            githubURL: projectData.githubURL,
-            projectTags: projectData.projectTags
+            id,
+            title,
+            description,
+            titleFr,
+            descriptionFr,
+            imageName,
+            imageURL,
+            websiteURL,
+            githubURL,
+            projectTags
           });
         });
     }
