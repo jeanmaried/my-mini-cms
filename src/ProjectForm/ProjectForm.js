@@ -39,7 +39,6 @@ class ProjectForm extends Component {
 
   handleTextChange = e => {
     const { name, value } = e.target;
-
     this.setState({
       [name]: value
     });
@@ -47,7 +46,6 @@ class ProjectForm extends Component {
 
   handleImage = e => {
     const { files } = e.target;
-
     this.setState({
       image: files[0],
       imageName: files[0].name
