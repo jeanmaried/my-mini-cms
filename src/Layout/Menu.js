@@ -23,9 +23,11 @@ class Menu extends Component {
     });
     this.props.history.push('/');
   };
+
   render() {
+    const { menuContainer, logout } = styles;
     return (
-      <nav style={styles.menuContainer}>
+      <nav style={menuContainer}>
         <ul className="menu flex direction-column">
           <Link to="/">
             <li>Home</li>
@@ -37,7 +39,7 @@ class Menu extends Component {
             <li>Projects</li>
           </Link>
           {this.props.auth ? (
-            <li style={styles.logout} onClick={this.logout} className="flex">
+            <li style={logout} onClick={this.logout} className="flex">
               Log Out
             </li>
           ) : null}

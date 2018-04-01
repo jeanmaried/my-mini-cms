@@ -23,15 +23,13 @@ const styles = {
 
 class Home extends Component {
   render() {
+    const { home, profilePicContainer, img } = styles;
     return (
-      <div
-        className="flex direction-column align-items-center"
-        style={styles.home}
-      >
+      <div className="flex direction-column align-items-center" style={home}>
         <h1 className="text-align">Welcome to your very own CMS</h1>
-        <div style={styles.profilePicContainer}>
+        <div style={profilePicContainer}>
           <img
-            style={styles.img}
+            style={img}
             src={require('../assets/red-rocket.png')}
             alt="hello pic"
           />

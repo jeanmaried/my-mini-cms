@@ -9,18 +9,7 @@ const styles = {
     padding: '20px 15px 20px 15px'
   },
 
-  flag: {
-    height: 40,
-    paddingLeft: 5,
-    paddingRight: 5
-  },
-
-  flagHolder: {
-    cursor: 'pointer'
-  },
-
   profilePicContainer: {
-    // padding: 50,
     width: 40,
     height: 40
   },
@@ -32,13 +21,9 @@ const styles = {
 };
 
 class Header extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      profilePic: ''
-    };
-  }
+  state = {
+    profilePic: ''
+  };
 
   componentDidMount() {
     auth.onAuthStateChanged(userData => {
@@ -54,8 +39,9 @@ class Header extends Component {
   }
 
   render() {
+    const { header, profilePicContainer, img } = styles;
     return (
-      <header style={styles.header}>
+      <header style={header}>
         {this.props.auth ? (
           <div className="flex direction-row justify-between">
             <div className="flex">
@@ -65,12 +51,8 @@ class Header extends Component {
               </Link>
             </div>
 
-            <div style={styles.profilePicContainer}>
-              <img
-                style={styles.img}
-                src={this.state.profilePic}
-                alt="profile pic"
-              />
+            <div style={profilePicContainer}>
+              <img style={img} src={this.state.profilePic} alt="profile pic" />
             </div>
           </div>
         ) : null}

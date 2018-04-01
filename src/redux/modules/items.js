@@ -22,18 +22,12 @@ export const getAllProjects = projects => ({
   payload: projects
 });
 
-// export const getEditProject = project => ({
-//   type: GET_EDIT_PROJECT,
-//   payload: project
-// });
-
 export default (
   state = {
     authenticated: false,
     userInfo: {},
     project: {},
     projects: undefined
-    // editProject: ''
   },
   action
 ) => {
@@ -46,8 +40,6 @@ export default (
       return { ...state, project: {} };
     case GET_ALL_PROJECTS:
       return { ...state, projects: action.payload };
-    // case GET_EDIT_PROJECT:
-    //   return { ...state, editProject: action.payload };
     default:
       return state;
   }

@@ -23,7 +23,8 @@ class Routes extends Component {
   }
 
   render() {
-    let authRoutes = this.props.auth ? (
+    const { user, auth } = this.props;
+    let authRoutes = auth ? (
       <Switch>
         <Route exact path="/about" component={About} />
         <Route exact path="/projects" component={Projects} />
@@ -34,11 +35,7 @@ class Routes extends Component {
     ) : null;
     return (
       <Switch>
-        <Route
-          exact
-          path="/"
-          component={this.props.auth && this.props.user ? Home : Login}
-        />
+        <Route exact path="/" component={auth && user ? Home : Login} />
         {authRoutes}}
       </Switch>
     );

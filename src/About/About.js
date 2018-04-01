@@ -1,121 +1,120 @@
 import React, { Component } from 'react';
 import firebase from '../firebase';
 import { connect } from 'react-redux';
-
-const styles = {
-  projectContainer: {
-    width: '80vw',
-    minHeight: '100vh'
-  },
-
-  description: {
-    paddingBottom: 150
-  },
-
-  button: {
-    width: 200
-  },
-
-  languageContainer: {
-    width: '35vw'
-  },
-
-  languageTitle: {
-    padding: '2rem'
-  }
-};
+import { styles } from './styles';
 
 class About extends Component {
-  constructor() {
-    super();
-    this.state = {
-      aboutTitle: '',
-      aboutContent: '',
-      aboutTitleFr: '',
-      aboutContentFr: ''
-    };
-  }
+  state = {
+    title: '',
+    content: '',
+    titleFr: '',
+    contentFr: ''
+  };
 
   componentDidMount() {
-    const itemsRef = firebase.database().ref('about');
-    itemsRef.on('value', snapshot => {
-      let items = snapshot.val();
-      this.setState({
-        aboutTitle: items.title,
-        aboutContent: items.content,
-        aboutTitleFr: items.titleFr,
-        aboutContentFr: items.contentFr
+    firebase
+      .database()
+      .ref('about')
+      .on('value', snapshot => {
+        const items = snapshot.val();
+        const { title, content, titleFr, contentFr } = items;
+        this.setState({
+          title,
+          content,
+          titleFr,
+          contentFr
+        });
       });
-    });
+  }
+
+  componentWillUnmount() {
+    firebase
+      .database()
+      .ref('about')
+      .off();
   }
 
   handleChange = e => {
+    const { name, value } = e.target;
     this.setState({
-      [e.target.name]: e.target.value
+      [name]: value
     });
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    const itemsRef = firebase.database().ref('about');
+    const { title, content, titleFr, contentFr } = this.state;
     const item = {
-      title: this.state.aboutTitle,
-      content: this.state.aboutContent,
-      titleFr: this.state.aboutTitleFr,
-      contentFr: this.state.aboutContentFr
+      title,
+      content,
+      titleFr,
+      contentFr
     };
-    itemsRef.update(item);
+    firebase
+      .database()
+      .ref('about')
+      .update(item);
   };
 
   render() {
+    const {
+      projectContainer,
+      description,
+      button,
+      languageContainer,
+      languageTitle
+    } = styles;
+
+    const { title, content, titleFr, contentFr } = this.state;
+
     return (
-      <div style={styles.projectContainer}>
+      <div style={projectContainer}>
         <h1 className="text-align">About Page</h1>
         <div className="container flex direction-column">
           <section className="add-item">
             <form onSubmit={this.handleSubmit}>
               <div className="flex justify-between">
-                <div style={styles.languageContainer}>
-                  <h2 style={styles.languageTitle} className="text-align">
+                <div style={languageContainer}>
+                  <h2 style={languageTitle} className="text-align">
                     English
                   </h2>
                   <input
                     type="text"
-                    name="aboutTitle"
+                    name="title"
                     placeholder="Title"
                     onChange={this.handleChange}
-                    value={this.state.aboutTitle}
+                    value={title}
                   />
                   <textarea
-                    name="aboutContent"
+                    name="content"
                     placeholder="Content"
-                    style={styles.description}
+                    style={description}
                     onChange={this.handleChange}
-                    value={this.state.aboutContent}
+                    value={content}
                   />
                 </div>
-                <div style={styles.languageContainer}>
-                  <h2 style={styles.languageTitle} className="text-align">
+                <div style={languageContainer}>
+                  <h2 style={languageTitle} className="text-align">
                     Français
-                  </h2>{' '}
+                  </h2>
                   <input
                     type="text"
-                    name="aboutTitleFr"
+                    name="titleFr"
                     placeholder="Titre"
                     onChange={this.handleChange}
-                    value={this.state.aboutTitleFr}
+                    value={titleFr}
                   />
                   <textarea
-                    name="aboutContentFr"
+                    name="contentFr"
                     placeholder="Contenu"
-                    style={styles.description}
+                    style={description}
                     onChange={this.handleChange}
-                    value={this.state.aboutContentFr}
+                    value={contentFr}
                   />
                 </div>
               </div>
               <div className="flex justify-center">
-                <button style={styles.button}>Submit Changes</button>
+                <button style={button}>Submit Changes</button>
               </div>
             </form>
           </section>

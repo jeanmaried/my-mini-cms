@@ -2,24 +2,7 @@ import React, { Component } from 'react';
 import firebase from '../firebase';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
-const styles = {
-  projectContainer: {
-    width: '80vw'
-  },
-  descriptionStyle: {
-    paddingBottom: 150
-  },
-  button: {
-    width: 200
-  },
-  containerByLanguage: {
-    width: '35vw'
-  },
-  languageTitle: {
-    padding: '2rem'
-  }
-};
+import { styles } from './styles';
 
 class ProjectForm extends Component {
   state = {
@@ -217,96 +200,96 @@ class ProjectForm extends Component {
         <h1 className="text-align">
           {pathname === '/addproject' ? 'Add Project' : 'Edit Project'}
         </h1>
-        {this.props.user ? (
-          <div>
-            <div className="container flex direction-column">
-              <section className="add-item">
-                <form onSubmit={this.handleSubmit}>
-                  <div className="flex justify-between">
-                    <div style={containerByLanguage}>
-                      <h2 style={languageTitle} className="text-align">
-                        English
-                      </h2>
-                      <input
-                        type="text"
-                        name="title"
-                        placeholder="Title"
-                        onChange={this.handleTextChange}
-                        value={title}
-                      />
-                      <textarea
-                        name="description"
-                        placeholder="Description"
-                        style={descriptionStyle}
-                        onChange={this.handleTextChange}
-                        value={description}
-                      />
-                    </div>
-                    <div style={containerByLanguage}>
-                      <h2 style={languageTitle} className="text-align">
-                        Français
-                      </h2>
-                      <input
-                        type="text"
-                        name="titleFr"
-                        placeholder="Titre"
-                        onChange={this.handleTextChange}
-                        value={titleFr}
-                      />
-                      <textarea
-                        name="descriptionFr"
-                        placeholder="Description"
-                        style={descriptionStyle}
-                        onChange={this.handleTextChange}
-                        value={descriptionFr}
-                      />
-                    </div>
+        {/* {this.props.user ? ( */}
+        <div>
+          <div className="container flex direction-column">
+            <section className="add-item">
+              <form onSubmit={this.handleSubmit}>
+                <div className="flex justify-between">
+                  <div style={containerByLanguage}>
+                    <h2 style={languageTitle} className="text-align">
+                      English
+                    </h2>
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="Title"
+                      onChange={this.handleTextChange}
+                      value={title}
+                    />
+                    <textarea
+                      name="description"
+                      placeholder="Description"
+                      style={descriptionStyle}
+                      onChange={this.handleTextChange}
+                      value={description}
+                    />
                   </div>
-                  <input
-                    type="text"
-                    name="websiteURL"
-                    placeholder="Website URL"
-                    onChange={this.handleTextChange}
-                    value={websiteURL}
-                  />
-                  <input
-                    type="text"
-                    name="githubURL"
-                    placeholder="GitHub URL"
-                    onChange={this.handleTextChange}
-                    value={githubURL}
-                  />
-                  <input
-                    type="text"
-                    name="projectTags"
-                    placeholder="Tags"
-                    onChange={this.handleTextChange}
-                    value={projectTags}
-                  />
-                  <input
-                    type="file"
-                    name="image"
-                    id="Image"
-                    onChange={this.handleImage}
-                  />
-                  <div className="flex justify-around">
-                    <button style={button}>
-                      {loading
-                        ? 'Loading...'
-                        : pathname === '/addproject'
-                          ? 'Add Project'
-                          : 'Edit Project'}
-                    </button>
+                  <div style={containerByLanguage}>
+                    <h2 style={languageTitle} className="text-align">
+                      Français
+                    </h2>
+                    <input
+                      type="text"
+                      name="titleFr"
+                      placeholder="Titre"
+                      onChange={this.handleTextChange}
+                      value={titleFr}
+                    />
+                    <textarea
+                      name="descriptionFr"
+                      placeholder="Description"
+                      style={descriptionStyle}
+                      onChange={this.handleTextChange}
+                      value={descriptionFr}
+                    />
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  name="websiteURL"
+                  placeholder="Website URL"
+                  onChange={this.handleTextChange}
+                  value={websiteURL}
+                />
+                <input
+                  type="text"
+                  name="githubURL"
+                  placeholder="GitHub URL"
+                  onChange={this.handleTextChange}
+                  value={githubURL}
+                />
+                <input
+                  type="text"
+                  name="projectTags"
+                  placeholder="Tags"
+                  onChange={this.handleTextChange}
+                  value={projectTags}
+                />
+                <input
+                  type="file"
+                  name="image"
+                  id="Image"
+                  onChange={this.handleImage}
+                />
+                <div className="flex justify-around">
+                  <button style={button}>
+                    {loading
+                      ? 'Loading...'
+                      : pathname === '/addproject'
+                        ? 'Add Project'
+                        : 'Edit Project'}
+                  </button>
 
-                    <button style={button} onClick={this.backToProjects}>
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              </section>
-            </div>
+                  <button style={button} onClick={this.backToProjects}>
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </section>
           </div>
-        ) : null}
+        </div>
+        {/* ) : null} */}
       </div>
     );
   }
