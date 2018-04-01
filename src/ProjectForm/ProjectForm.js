@@ -67,59 +67,43 @@ class ProjectForm extends Component {
       githubURL,
       projectTags
     };
-
+    const { pathname } = this.props.location;
     const itemsRef = firebase.database().ref('projects');
 
-    if (this.props.location.pathname !== '/addproject') {
-      if (image) {
-        const imagesRef = firebase
-          .storage()
-          .ref()
-          .child(image.name);
-        imagesRef.put(image).on(
-          'state_changed',
-          snapshot => {},
-          error => {
-            console.log(error);
-          },
-          () => {
-            imagesRef
-              .getDownloadURL()
-              .then(url => {
-                item.imageURL = url;
-                itemsRef.child(id).update(item);
-                this.backToProjects();
-              })
-              .catch(error => {});
-          }
-        );
-      } else {
-        itemsRef.child(id).update(item);
-        this.backToProjects();
-      }
+    if (image) {
+      this.uploadWithImage(image, item, itemsRef, id, pathname);
     } else {
-      const imagesRef = firebase
-        .storage()
-        .ref()
-        .child(image.name);
-      imagesRef.put(image).on(
-        'state_changed',
-        snapshot => {},
-        error => {
-          console.log(error);
-        },
-        () => {
-          imagesRef
-            .getDownloadURL()
-            .then(url => {
-              item.imageURL = url;
-              itemsRef.push(item);
-              this.backToProjects();
-            })
-            .catch(error => {});
-        }
-      );
+      itemsRef.child(id).update(item);
+      this.backToProjects();
     }
+  };
+
+  uploadWithImage = (image, item, itemsRef, id, pathname) => {
+    const imagesRef = firebase
+      .storage()
+      .ref()
+      .child(image.name);
+    imagesRef.put(image).on(
+      'state_changed',
+      snapshot => {},
+      error => {
+        console.log(error);
+      },
+      () => {
+        imagesRef
+          .getDownloadURL()
+          .then(url => {
+            item.imageURL = url;
+            if (pathname !== '/addproject') {
+              itemsRef.child(id).update(item);
+            } else {
+              itemsRef.push(item);
+            }
+            this.backToProjects();
+          })
+          .catch(error => {});
+      }
+    );
   };
 
   componentDidMount() {
@@ -200,7 +184,6 @@ class ProjectForm extends Component {
         <h1 className="text-align">
           {pathname === '/addproject' ? 'Add Project' : 'Edit Project'}
         </h1>
-        {/* {this.props.user ? ( */}
         <div>
           <div className="container flex direction-column">
             <section className="add-item">
@@ -289,16 +272,13 @@ class ProjectForm extends Component {
             </section>
           </div>
         </div>
-        {/* ) : null} */}
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ stateItems }) => ({
-  auth: stateItems.authenticated,
-  user: stateItems.userInfo,
-  toggle: stateItems.toggleNewProject
+  auth: stateItems.authenticated
 });
 
 export default withRouter(connect(mapStateToProps)(ProjectForm));
