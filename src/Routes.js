@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import About from './About';
-import Projects from './Projects';
+import Projects from './components/Projects';
 import NotFound from './NotFound';
 import Login from './Login';
 import Home from './Home';

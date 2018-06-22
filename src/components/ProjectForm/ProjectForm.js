@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import firebase from '../firebase';
+import firebase from '../../firebase';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { handleChange } from '../../redux/modules/items';
 import { styles } from './styles';
 
 class ProjectForm extends Component {
@@ -22,15 +23,14 @@ class ProjectForm extends Component {
 
   handleTextChange = e => {
     const { name, value } = e.target;
-
-    this.setState({
-      [name]: value
-    });
+    this.props.dispatch(handleChange({ name, value }));
+    // this.setState({
+    //   [name]: value
+    // });
   };
 
   handleImage = e => {
     const { files } = e.target;
-
     this.setState({
       image: files[0],
       imageName: files[0].name
@@ -49,14 +49,16 @@ class ProjectForm extends Component {
       description,
       titleFr,
       descriptionFr,
-      imageName,
+      // imageName,
       imageURL,
       websiteURL,
       githubURL,
       projectTags,
-      image,
+      // image,
       id
-    } = this.state;
+    } = this.props;
+
+    const { imageName, image } = this.state;
 
     const item = {
       title,
@@ -69,6 +71,7 @@ class ProjectForm extends Component {
       githubURL,
       projectTags
     };
+
     const { pathname } = this.props.location;
     const itemsRef = firebase.database().ref('projects');
 
@@ -85,9 +88,12 @@ class ProjectForm extends Component {
       .storage()
       .ref()
       .child(image.name);
-
-    imagesRef.put(image).on('state_changed', snapshot => { },
-      error => { console.log(error) },
+    imagesRef.put(image).on(
+      'state_changed',
+      snapshot => {},
+      error => {
+        console.log(error);
+      },
       () => {
         imagesRef
           .getDownloadURL()
@@ -100,14 +106,13 @@ class ProjectForm extends Component {
             }
             this.backToProjects();
           })
-          .catch(error => { });
+          .catch(error => {});
       }
     );
   };
 
   componentDidMount() {
     const location = this.props.location.pathname;
-
     if (location !== '/addproject') {
       const id = location.slice(13);
 
@@ -118,13 +123,39 @@ class ProjectForm extends Component {
           const projects = snapshot.val();
           const project = projects[id];
 
-          this.setState({ id, ...project });
+          const {
+            title,
+            description,
+            titleFr,
+            descriptionFr,
+            imageName,
+            imageURL,
+            websiteURL,
+            githubURL,
+            projectTags
+          } = project;
+
+          this.setState({
+            id,
+            title,
+            description,
+            titleFr,
+            descriptionFr,
+            imageName,
+            imageURL,
+            websiteURL,
+            githubURL,
+            projectTags
+          });
         });
     }
   }
 
   componentWillUnmount() {
-    firebase.database().ref('projects').off();
+    firebase
+      .database()
+      .ref('projects')
+      .off();
   }
 
   backToProjects = () => {
@@ -151,7 +182,7 @@ class ProjectForm extends Component {
       githubURL,
       projectTags,
       loading
-    } = this.state;
+    } = this.props;
 
     return (
       <div style={projectContainer}>
@@ -251,8 +282,34 @@ class ProjectForm extends Component {
   }
 }
 
-const mapStateToProps = ({ stateItems }) => ({
-  auth: stateItems.authenticated
-});
+const mapStateToProps = ({ stateItems }) => {
+  const {
+    id,
+    title,
+    description,
+    titleFr,
+    descriptionFr,
+    image,
+    imageName,
+    imageURL,
+    websiteURL,
+    githubURL,
+    projectTags
+  } = stateItems;
+
+  return {
+    id,
+    title,
+    description,
+    titleFr,
+    descriptionFr,
+    image,
+    imageName,
+    imageURL,
+    websiteURL,
+    githubURL,
+    projectTags
+  };
+};
 
 export default withRouter(connect(mapStateToProps)(ProjectForm));
